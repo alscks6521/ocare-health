@@ -291,18 +291,18 @@ class _HomeScreenState extends State<HomeScreen> {
               0,
               0,
             ),
-            child: UserInfoCard(user: user),
+            child: UserInfoCard(user: user, slideOffset: 0.0,),
           ),
 
 
           Positioned(
             top: 0,
             bottom: 0,
-            left: 10,
+            right: 10,
             child: Center(
               child: AnimatedOpacity(
-                opacity: _slideOffset == -MediaQuery.of(context).size.width ? 1.0 : 0.0,
-                duration: Duration(milliseconds: 200),
+                opacity: _slideOffset == 0 ? 1.0 : 0.0,
+                duration: Duration(milliseconds: 100),
                 child: Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
@@ -310,7 +310,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   padding: EdgeInsets.all(8.0),
                   child: Icon(
-                    Icons.arrow_back_ios,
+                    Icons.arrow_forward_ios,
                     color: Colors.white,
                   ),
                 ),
@@ -550,8 +550,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class UserInfoCard extends StatelessWidget {
   final UserModel user;
+  final double slideOffset;
 
-  const UserInfoCard({Key? key, required this.user}) : super(key: key);
+  const UserInfoCard({Key? key, required this.user, required this.slideOffset}) : super(key: key);
 
   Future<String> getOtherUserName(String userId) async {
     String otherUserId = userId == 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2'
@@ -574,83 +575,106 @@ class UserInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-
-      // 크기 고정 로직
-      width: 500, // 가로 길이 맞춰서 코드 수정해야함.
+      width: 500,
       height: 200,
-
-      padding: const EdgeInsets.all(27.0),
-      decoration: BoxDecoration(
-        color: const Color(0xFFEFEFEF),
-        borderRadius: BorderRadius.circular(26.0),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x29000000),
-            blurRadius: 6.0,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Stack(
         children: [
-          FutureBuilder<String>(
-            future: getOtherUserName(user.name),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('에러: ${snapshot.error}');
-              } else {
-                // string이 공백일 경우 연결되지 않음을 출력. 일단,
-                String otherUserName = snapshot.data?.trim() ?? '';
-                if (otherUserName.isEmpty) {
-                  return Text(
-                    '연결되지 않음',
-                    style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                  );
-                } else {
-
-
-                  return RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: '${user.guardian} 님과 \n연결되어 있습니다.\n',
-                          style: TextStyle(
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            padding: const EdgeInsets.all(27.0),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEFEFEF),
+              borderRadius: BorderRadius.circular(26.0),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x29000000),
+                  blurRadius: 6.0,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                FutureBuilder<String>(
+                  future: getOtherUserName(user.name),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('에러: ${snapshot.error}');
+                    } else {
+                      String otherUserName = snapshot.data?.trim() ?? '';
+                      if (otherUserName.isEmpty) {
+                        return Text(
+                          '연결되지 않음',
+                          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                        );
+                      } else {
+                        return RichText(
+                          textAlign: TextAlign.center,
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '${user.guardian} 님과 \n연결되어 있습니다.\n',
+                                style: TextStyle(
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              TextSpan(
+                                text: '자세히 보시려면 눌러주세요.',
+                                style: TextStyle(
+                                  fontSize: 20.0,
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    context.push(AppScreen.userDetail);
+                                    print('자세히 보기 클릭');
+                                  },
+                              ),
+                            ],
                           ),
-                        ),
-                        TextSpan(
-                          text: '자세히 보시려면 눌러주세요.',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
-                          ),
-
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                            // user detail로 이동하는 로직.
-                              context.push(AppScreen.userDetail);
-                              print('자세히 보기 클릭');
-                            },
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              }
-            },
+                        );
+                      }
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 0,
+            bottom: 0,
+            left: 10,
+            child: Center(
+              child: AnimatedOpacity(
+                opacity: slideOffset == 0 ? 1.0 : 0.0,
+                duration: Duration(milliseconds: 200),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey.withOpacity(0.5),
+                  ),
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
+
 }
 
 class UserGuardBox extends StatelessWidget {
@@ -660,41 +684,91 @@ class UserGuardBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     return Container(
-
-      width: 500, // 가로 길이 맞춰서 코드 수정해야함.
+      width: 500,
       height: 200,
-
-      padding: const EdgeInsets.all(27.0),
-      decoration: BoxDecoration(
-        color: const Color(0xFFEFEFEF),
-        borderRadius: BorderRadius.circular(26.0),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x29000000),
-            blurRadius: 6.0,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Stack(
         children: [
-          Icon(
-            Icons.person,
-            color: Color(0xFF276AEE),
-            size: 56.49,
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            padding: const EdgeInsets.all(27.0),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEFEFEF),
+              borderRadius: BorderRadius.circular(26.0),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x29000000),
+                  blurRadius: 6.0,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.person,
+                  color: Color(0xFF276AEE),
+                  size: 56.49,
+                ),
+                SizedBox(height: 16.0),
+                Text(
+                  '${user.guardian} 님',
+                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
           ),
-          SizedBox(height: 16.0),
-          Text(
-            '${user.guardian} 님',
-            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+          Positioned(
+            top: 0,
+            bottom: 0,
+            right: 10,
+            child: Center(
+              child: AnimatedOpacity(
+                opacity: _slideOffset == 0 ? 1.0 : 0.0,
+                duration: Duration(milliseconds: 100),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey.withOpacity(0.5),
+                  ),
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
           ),
+          Positioned(
+            top: 0,
+            bottom: 0,
+            left: 10,
+            child: Center(
+              child: AnimatedOpacity(
+                opacity: _slideOffset == 0 ? 1.0 : 0.0,
+                duration: Duration(milliseconds: 100),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey.withOpacity(0.5),
+                  ),
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+
         ],
       ),
     );
   }
 }
+double _slideOffset = 0.0;
