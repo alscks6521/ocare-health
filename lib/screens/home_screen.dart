@@ -220,31 +220,28 @@ class _HomeScreenState extends State<HomeScreen> {
                             children: [
                               Text(
                                 '혈압',
-                                style: TextStyle(fontSize: 15.0),
+                                style: TextStyle(fontSize: 20.0),
                               ),
-                              SizedBox(height: 8.0), // 줄 간격
                               Text(
                                 '이완/ 수축',
-                                style: TextStyle(fontSize: 15.0),
+                                style: TextStyle(fontSize: 14.0),
                               ),
-                              SizedBox(height: 8.0), // 줄 간격
                               Text(
                                 '${user.diastolic}/ ${user.systolic}',
                                 style: TextStyle(
-                                  fontSize: 25.0,
+                                  fontSize: 28.0,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                               SizedBox(height: 16.0), // 큰 줄 간격
                               Text(
                                 '혈당',
-                                style: TextStyle(fontSize: 15.0),
+                                style: TextStyle(fontSize: 20.0),
                               ),
-                              SizedBox(height: 8.0), // 줄 간격
                               Text(
                                 '${user.bloodSugar}',
                                 style: TextStyle(
-                                  fontSize: 25.0,
+                                  fontSize: 28.0,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -604,26 +601,26 @@ class UserInfoCard extends StatelessWidget {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: '더 많은 사용자를 원하시나요?',
+                                text: '연동된 파트너의 계정이 없습니다',
                                 style: TextStyle(
-                                  fontSize: 24.0,
+                                  fontSize: 22.0,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
                                 ),
                               ),
-                              TextSpan(
-                                text: '\n사용자 추가하기.',
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  color: Colors.blue,
-                                  decoration: TextDecoration.underline,
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () {
-                                    context.push(AppScreen.userDetail);
-                                    print('자세히 보기 클릭');
-                                  },
-                              ),
+                              // TextSpan(
+                              //   text: '\n사용자 추가하기.',
+                              //   style: TextStyle(
+                              //     fontSize: 20.0,
+                              //     color: Colors.blue,
+                              //     decoration: TextDecoration.underline,
+                              //   ),
+                              //   recognizer: TapGestureRecognizer()
+                              //     ..onTap = () {
+                              //       context.push(AppScreen.userDetail);
+                              //       print('자세히 보기 클릭');
+                              //     },
+                              // ),
                             ],
                           ),
                         );
@@ -693,19 +690,49 @@ class UserGuardBox extends StatelessWidget {
             child: IntrinsicHeight(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                 children: [
                   Column(
                     mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+
                     children: [
-                      Icon(
+
+                  Icon(
                         Icons.person,
                         color: Color(0xFF276AEE),
                         size: 56.49,
                       ),
-                      Text(
-                        '${user.guardian} 님',
-                        style: TextStyle(fontSize: 20.0),
+
+                      RichText(
+                        textAlign: TextAlign.center,
+
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '파트너의 정보\n',
+                              style: TextStyle(
+                                fontSize: 15.0, // 혈압 텍스트 크기
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+
+                              ),
+                            ),
+                            TextSpan(
+                              text: '${user.guardian}',
+                              style: TextStyle(
+                                fontSize: 20.0, // 이완 수축 텍스트 크기
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
+
+
+
                     ],
                   ),
                   SizedBox(width: 0),
@@ -723,31 +750,28 @@ class UserGuardBox extends StatelessWidget {
                         children: [
                           Text(
                             '혈압',
-                            style: TextStyle(fontSize: 15.0),
+                            style: TextStyle(fontSize: 20.0),
                           ),
-                          SizedBox(height: 8.0), // 줄 간격
                           Text(
                             '이완/ 수축',
-                            style: TextStyle(fontSize: 15.0),
+                            style: TextStyle(fontSize: 14.0),
                           ),
-                          SizedBox(height: 8.0), // 줄 간격
                           Text(
                             '${user.diastolic}/ ${user.systolic}',
                             style: TextStyle(
-                              fontSize: 25.0,
+                              fontSize: 28.0,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           SizedBox(height: 16.0), // 큰 줄 간격
                           Text(
                             '혈당',
-                            style: TextStyle(fontSize: 15.0),
+                            style: TextStyle(fontSize: 20.0),
                           ),
-                          SizedBox(height: 8.0), // 줄 간격
                           Text(
                             '${user.bloodSugar}',
                             style: TextStyle(
-                              fontSize: 25.0,
+                              fontSize: 28.0,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
