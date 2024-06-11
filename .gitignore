@@ -1,150 +1,46 @@
-# Flutter/Dart/Pub related
-**/build/
-.dart_tool/
-.flutter-plugins
-.flutter-plugins-dependencies
-.packages
-.pub-cache/
-.pub/
-/build/
-**/build/
-
-# IntelliJ related
-.idea/
-*.iml
-
-# VS Code related
-.vscode/
-
-# Mac related
-*.DS_Store
-
-# Windows related
-*.exe
-*.dll
-*.bat
-*.pdb
-*.tmp
-*.obj
-*.o
-
-# Linux related
-*.so
-
-# Android related
-**/android/app/debug
-**/android/app/profile
-**/android/app/release
-
-# iOS related
-**/ios/Flutter/App.framework
-**/ios/Flutter/Flutter.framework
-**/ios/Flutter/Flutter.podspec
-**/ios/ServiceDefinitions.json
-**/ios/Runner/GeneratedPluginRegistrant.*
-
-# Android Studio
-.idea
-.gradle
-/local.properties
-.DS_Store
-/Android
-*.iml
-
 # Miscellaneous
+*.class
 *.log
-*.lock
 *.pyc
 *.swp
-*.zip
-*.tar.gz
-*.crt
-*.pem
-*.p12
-*.jks
-*.keystore
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
 
-# Obsolete files
-*.orig
-*.rej
-*~ 
-**/flutter_*.state
-**/.android
-**/.ios
-**/.gradle
-**/.metadata
-**/.packages
-**/.flutter-plugins-dependencies
-**/.flutter-plugins
-**/pubspec.lock
-**/.dart_tool/
-**/.idea
-**/assets/AssetManifest.json
-**/assets/FontManifest.json
-**/assets/LICENSE
-**/pubspec.lock
-**/web/.dart_tool/
-**/web/.packages
-**/web/flutter_*.state
-**/web/.flutter-plugins-dependencies
-**/web/.flutter-plugins
-**/web/.dart_tool/
-**/web/.packages
-**/web/flutter_*.state
-**/web/.flutter-plugins-dependencies
-**/web/.flutter-plugins
-
-# Flutter generated files
-**/ios/.generated
-**/android/.generated
-**/web/.generated
-**/lib/.generated
-**/macos/.generated
-**/windows/.generated
-**/linux/.generated
-
-# JetBrains IDEs
-.idea/
+# IntelliJ related
 *.iml
 *.ipr
 *.iws
-out/
+.idea/
 
-# VS Code
-.vscode/
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
 
-# Flutter specific
-.flutter-plugins
-.flutter-plugins-dependencies
-.packages
-.DS_Store
-
-# Pub related
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
-.packages
 .pub-cache/
 .pub/
+/build/
 
-# Cache directories
-.cache
-tmp/
+# Symbolication related
+app.*.symbols
 
-# Web related
-.html
-.dart_tool/
-.packages
-.web/
+# Obfuscation related
+app.*.map.json
 
-# Windows related
-*.exe
-*.dll
-*.bat
-*.log
-
-# macOS related
-.DS_Store
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
 
 # # Flutter 관련 파일 및 디렉토리
 # .dart_tool/
