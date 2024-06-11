@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ocare/calendarAndChart/screens/chart_page.dart';
+import 'package:ocare/screens/page/user_data_save_page.dart';
 import 'package:ocare/screens/page/user_detail.dart';
 import '../calendarAndChart/screens/calendar_page.dart';
 import '../calendarAndChart/screens/profile-calendar-chart.dart';
@@ -54,7 +55,6 @@ final router = GoRouter(
           ),
         ),
 
-
         // notification list page
 
         GoRoute(
@@ -64,8 +64,24 @@ final router = GoRouter(
             child: const UserDetail(),
           ),
         ),
-      ],
 
+        GoRoute(
+          path: AppScreen.userDataSavePage,
+          pageBuilder: (context, state) => MaterialPage(
+            key: state.pageKey,
+            child: const UserDataSavePage(),
+          ),
+        ),
+
+        ///route 만들때 이거 가져다 사용
+        // GoRoute(
+        //   path: AppScreen.,
+        //   pageBuilder: (context, state) => MaterialPage(
+        //     key: state.pageKey,
+        //     child: const (),
+        //   ),
+        // ),
+      ],
     ),
 
     //개별 분리 위해 shellroute 밖에 선언. navigationbar 안보이게.
@@ -104,7 +120,6 @@ final router = GoRouter(
         child: const calendarAndChart(),
       ),
     ),
-
   ],
   errorBuilder: (context, state) => const Scaffold(
     body: Center(
@@ -128,6 +143,7 @@ class AppScreen {
   static String calendarPage = '/calendarPage';
   static String chartPage = '/chartPage';
   static String userDetail = '/userDetail';
+  static String userDataSavePage = '/userDataSavePage';
 }
 
 int _calculateSelectedIndex(String location) {
