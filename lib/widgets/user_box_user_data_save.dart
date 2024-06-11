@@ -1,12 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:ocare/widgets/text_field_with_controller.dart';
+// import 'package:ocare/widgets/user_data_text_field_with_controller.dart';
 import 'package:provider/provider.dart';
+
 import '../models/user_model.dart';
 import '../services/firebase-custom-service-save.dart';
-import 'text_field_with_controller.dart';
 
-class UserBox extends StatelessWidget {
-  UserBox({
+class UserBoxUserDataSave extends StatelessWidget {
+  UserBoxUserDataSave({
     super.key,
     required this.nameController,
     required this.idController,
@@ -17,6 +20,8 @@ class UserBox extends StatelessWidget {
     required this.diastolicController,
     required this.bloodSugarController,
   });
+
+
 
   final TextEditingController nameController;
   final TextEditingController idController;
@@ -34,25 +39,31 @@ class UserBox extends StatelessWidget {
   final bloodSugarValues =
   List.generate(400, (index) => (index + 60).toString());
 
+
+
+
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<UserModel>(context);
 
+
+    // 필요한 로직?
     String? validateValue(String? value, List<String> values) {
       if (value == null || !values.contains(value)) {
         return values.isNotEmpty ? values.first : null;
       }
       return value;
     }
-
-//상대방 데이터 가져오는 로직
+    //상대방 데이터 가져오는 로직
     Future<String> getOtherUserName(String userId) async {
       String otherUserId = userId == 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2'
           ? 'KWjegweDuEhSVN9I6D8iRnh22kc2'
           : 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2';
 
-      DocumentSnapshot snapshot =
-          await FirebaseFirestore.instance.collection('users').doc(otherUserId).get();
+      DocumentSnapshot snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(otherUserId)
+          .get();
 
       if (snapshot.exists) {
         Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
@@ -61,6 +72,10 @@ class UserBox extends StatelessWidget {
         return '상대방의 이름이 없습니다.';
       }
     }
+
+
+
+
 
     return Container(
         decoration: BoxDecoration(
@@ -138,62 +153,37 @@ class UserBox extends StatelessWidget {
               const SizedBox(height: 16.0),
               const SizedBox(height: 16.0),
               Row(
+
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(
-                        labelText: '수축기',
-                      ),
-                      value: validateValue(user.systolic.toString(), systolicValues),
-                      items: systolicValues.map((value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        systolicController.text = value ?? '';
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(
-                        labelText: '이완기',
-                      ),
-                      value: validateValue(user.diastolic.toString(), diastolicValues),
-                      items: diastolicValues.map((value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        diastolicController.text = value ?? '';
-                      },
-                    ),
-                  ),
-                  const SizedBox(width: 16.0),
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(
-                        labelText: '혈당',
-                      ),
 
-                      ///
-                      /// 값이 없을 경우 예외처리하는 로직입니다
-                      ///
-                      value: validateValue(user.bloodSugar.toString(), bloodSugarValues),
-                      items: bloodSugarValues.map((value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        bloodSugarController.text = value ?? '';
-                      },
+                  /// 일단 주석처리함. 제대로 실행되는거 확인후 디자인 수정하기
+                  // Expanded(
+                  //   child: TextFieldWithController(
+                  //       label: '수축기',
+                  //
+                  //     keyboardType: TextInputType.number,
+                  //     controller: systolicController,
+                  //
+                  //   ),
+                  // ),
+                  // Expanded(
+                  //   child: TextFieldWithController(
+                  //     decoration: const InputDecoration(
+                  //       labelText: '이완기',
+                  //     ),
+                  //     keyboardType: TextInputType.number,
+                  //     controller: diastolicController,
+                  //   ),
+                  // ),
+                  // const SizedBox(width: 16.0),
+                  Expanded(
+                    child: CustomTextField(
+                      label: '체중',
+                      hintText: '${user.weight}',
+                      controller: weightController,
+
+
                     ),
                   ),
                 ],
@@ -201,6 +191,9 @@ class UserBox extends StatelessWidget {
               const SizedBox(
                 height: 26,
               ),
+
+
+              /// 저장 로직입니다.
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -234,7 +227,7 @@ class UserBox extends StatelessWidget {
                         '저장',
                         style: TextStyle(
                           color: Colors.blueAccent,
-                          fontSize: 24.0,
+                          fontSize: 20.0,
                         ),
                       ),
                     ),
@@ -244,5 +237,4 @@ class UserBox extends StatelessWidget {
             ],
           ),
         ));
-  }
-}
+}}

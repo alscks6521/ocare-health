@@ -66,3 +66,70 @@ class TextFieldWithController extends StatelessWidget {
     );
   }
 }
+
+
+/// 텍스트필드 상속받는 class파일 입니다
+class CustomTextField extends TextFieldWithController {
+  const CustomTextField({
+    super.key,
+    required String label,
+    required String hintText,
+    required TextEditingController controller,
+    TextInputType keyboardType = TextInputType.text,
+    Color fillColor = Colors.white,
+    EdgeInsetsGeometry contentPadding = const EdgeInsets.symmetric(
+      vertical: 15.0,
+      horizontal: 15.0,
+    ),
+  }) : super(
+    label: label,
+    hintText: hintText,
+    controller: controller,
+    keyboardType: keyboardType,
+  );
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 8.0),
+        SizedBox(
+          width: 200,
+          height: 45,
+          child: TextField(
+            controller: controller,
+            keyboardType: keyboardType,
+            decoration: InputDecoration(
+              hintText: hintText,
+              hintStyle: const TextStyle(height: 0.0),
+              filled: true,
+              // fillColor: fillColor,
+              alignLabelWithHint: true,
+              // contentPadding: contentPadding,
+
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide.none,
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+                borderSide: BorderSide.none,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

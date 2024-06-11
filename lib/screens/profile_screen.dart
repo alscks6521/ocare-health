@@ -1,12 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ocare/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:ocare/controllers/user_controller.dart';
 import 'package:provider/provider.dart';
-import '../calendarAndChart/screens/profile-calendar-chart.dart';
 import '../models/user_model.dart';
 import '../router/app_router.dart';
 import '../services/notification_service.dart';
