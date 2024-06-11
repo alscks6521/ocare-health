@@ -212,27 +212,35 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+
+
+
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 '혈압',
                                 style: TextStyle(fontSize: 15.0),
                               ),
-                              SizedBox(width: 4.0),
+                              SizedBox(height: 8.0), // 줄 간격
                               Text(
-                                '${user.systolic}',
+                                '이완/ 수축',
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              SizedBox(height: 8.0), // 줄 간격
+                              Text(
+                                '${user.diastolic}/ ${user.systolic}',
                                 style: TextStyle(
                                   fontSize: 25.0,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(width: 8.0),
+                              SizedBox(height: 16.0), // 큰 줄 간격
                               Text(
                                 '혈당',
                                 style: TextStyle(fontSize: 15.0),
                               ),
-                              SizedBox(width: 4.0),
+                              SizedBox(height: 8.0), // 줄 간격
                               Text(
                                 '${user.bloodSugar}',
                                 style: TextStyle(
@@ -241,31 +249,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ],
-                          ),
-                          SizedBox(height: 8.0),
-                          Text(
-                            '이런 음식이 좋아요!',
-                            style: TextStyle(fontSize: 17.0),
-                          ),
-                          Text(
-                            _goodFoods,
-                            style: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          SizedBox(height: 8.0),
-                          Text(
-                            '이런 음식이 나빠요!',
-                            style: TextStyle(fontSize: 17.0),
-                          ),
-                          Text(
-                            _badFoods,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.grey,
-                            ),
-                          ),
+                          )
+
+
                         ],
                       ),
                     ),
@@ -607,7 +593,7 @@ class UserInfoCard extends StatelessWidget {
                       return Text('에러: ${snapshot.error}');
                     } else {
                       String otherUserName = snapshot.data?.trim() ?? '';
-                      if (otherUserName.isEmpty) {
+                      if (false) {
                         return Text(
                           '연결되지 않음',
                           style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
@@ -618,7 +604,7 @@ class UserInfoCard extends StatelessWidget {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                text: '${user.guardian} 님과 \n연결되어 있습니다.\n',
+                                text: '더 많은 사용자를 원하시나요?',
                                 style: TextStyle(
                                   fontSize: 24.0,
                                   fontWeight: FontWeight.bold,
@@ -626,7 +612,7 @@ class UserInfoCard extends StatelessWidget {
                                 ),
                               ),
                               TextSpan(
-                                text: '자세히 보시려면 눌러주세요.',
+                                text: '\n사용자 추가하기.',
                                 style: TextStyle(
                                   fontSize: 20.0,
                                   color: Colors.blue,
@@ -684,14 +670,14 @@ class UserGuardBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 500,
-      height: 200,
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        minWidth: double.infinity,
+        minHeight: 200,
+      ),
       child: Stack(
         children: [
           Container(
-            width: double.infinity,
-            height: double.infinity,
             padding: const EdgeInsets.all(27.0),
             decoration: BoxDecoration(
               color: const Color(0xFFEFEFEF),
@@ -704,23 +690,80 @@ class UserGuardBox extends StatelessWidget {
                 ),
               ],
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.person,
-                  color: Color(0xFF276AEE),
-                  size: 56.49,
-                ),
-                SizedBox(height: 16.0),
-                Text(
-                  '${user.guardian} 님',
-                  style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                ),
-              ],
+            child: IntrinsicHeight(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.person,
+                        color: Color(0xFF276AEE),
+                        size: 56.49,
+                      ),
+                      Text(
+                        '${user.guardian} 님',
+                        style: TextStyle(fontSize: 20.0),
+                      ),
+                    ],
+                  ),
+                  SizedBox(width: 0),
+                  VerticalDivider(
+                    color: Colors.grey,
+                    thickness: 1.0,
+                    width: 32.0,
+                  ),
+                  SizedBox(width: 15),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '혈압',
+                            style: TextStyle(fontSize: 15.0),
+                          ),
+                          SizedBox(height: 8.0), // 줄 간격
+                          Text(
+                            '이완/ 수축',
+                            style: TextStyle(fontSize: 15.0),
+                          ),
+                          SizedBox(height: 8.0), // 줄 간격
+                          Text(
+                            '${user.diastolic}/ ${user.systolic}',
+                            style: TextStyle(
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(height: 16.0), // 큰 줄 간격
+                          Text(
+                            '혈당',
+                            style: TextStyle(fontSize: 15.0),
+                          ),
+                          SizedBox(height: 8.0), // 줄 간격
+                          Text(
+                            '${user.bloodSugar}',
+                            style: TextStyle(
+                              fontSize: 25.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      )
+
+
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
+
+
           Positioned(
             top: 0,
             bottom: 0,
