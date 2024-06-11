@@ -141,11 +141,15 @@ class _HomeScreenState extends State<HomeScreen> {
       onHorizontalDragUpdate: (details) {
         setState(() {
           _slideOffset += details.delta.dx;
-          _slideOffset = _slideOffset.clamp(-MediaQuery.of(context).size.width, 0);
+          _slideOffset = _slideOffset.clamp(-MediaQuery.of(context).size.width * 2, 0);
         });
       },
       onHorizontalDragEnd: (details) {
-        if (_slideOffset < -MediaQuery.of(context).size.width / 2) {
+        if (_slideOffset < -MediaQuery.of(context).size.width * 1.5) {
+          setState(() {
+            _slideOffset = -MediaQuery.of(context).size.width * 2;
+          });
+        } else if (_slideOffset < -MediaQuery.of(context).size.width / 2) {
           setState(() {
             _slideOffset = -MediaQuery.of(context).size.width;
           });
@@ -155,6 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
           });
         }
       },
+
       child: Stack(
         children: [
           AnimatedContainer(
@@ -277,30 +282,42 @@ class _HomeScreenState extends State<HomeScreen> {
               0,
               0,
             ),
+            child: UserGuardBox(user: user),
+          ),
+          AnimatedContainer(
+            duration: Duration(milliseconds: 200),
+            transform: Matrix4.translationValues(
+              _slideOffset + MediaQuery.of(context).size.width * 2,
+              0,
+              0,
+            ),
             child: UserInfoCard(user: user),
           ),
+
+
           Positioned(
             top: 0,
             bottom: 0,
-            right: 10,
+            left: 10,
             child: Center(
               child: AnimatedOpacity(
-                opacity: _slideOffset == 0 ? 1.0 : 0.0,
+                opacity: _slideOffset == -MediaQuery.of(context).size.width ? 1.0 : 0.0,
                 duration: Duration(milliseconds: 200),
                 child: Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.grey.withOpacity(0.5),
                   ),
-                  padding: EdgeInsets.all(8.0), // 아이콘과 동그라미 사이의 간격 조절
+                  padding: EdgeInsets.all(8.0),
                   child: Icon(
-                    Icons.arrow_forward_ios,
+                    Icons.arrow_back_ios,
                     color: Colors.white,
                   ),
                 ),
               ),
             ),
-          )
+          ),
+
 
         ],
       ),
@@ -629,6 +646,52 @@ class UserInfoCard extends StatelessWidget {
                 }
               }
             },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class UserGuardBox extends StatelessWidget {
+  final UserModel user;
+
+  const UserGuardBox({Key? key, required this.user}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+
+
+    return Container(
+
+      width: 500, // 가로 길이 맞춰서 코드 수정해야함.
+      height: 200,
+
+      padding: const EdgeInsets.all(27.0),
+      decoration: BoxDecoration(
+        color: const Color(0xFFEFEFEF),
+        borderRadius: BorderRadius.circular(26.0),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x29000000),
+            blurRadius: 6.0,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.person,
+            color: Color(0xFF276AEE),
+            size: 56.49,
+          ),
+          SizedBox(height: 16.0),
+          Text(
+            '${user.guardian} 님',
+            style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
           ),
         ],
       ),
