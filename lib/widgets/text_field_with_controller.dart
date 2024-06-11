@@ -76,7 +76,6 @@ class CustomTextField extends TextFieldWithController {
     required String hintText,
     required TextEditingController controller,
     TextInputType keyboardType = TextInputType.text,
-    Color fillColor = Colors.white,
     EdgeInsetsGeometry contentPadding = const EdgeInsets.symmetric(
       vertical: 15.0,
       horizontal: 15.0,
@@ -90,9 +89,12 @@ class CustomTextField extends TextFieldWithController {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+
+
+    return Row(
       children: [
+
+
         Text(
           label,
           style: const TextStyle(
@@ -100,31 +102,41 @@ class CustomTextField extends TextFieldWithController {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(height: 8.0),
-        SizedBox(
-          width: 200,
-          height: 45,
-          child: TextField(
-            controller: controller,
-            keyboardType: keyboardType,
-            decoration: InputDecoration(
-              hintText: hintText,
-              hintStyle: const TextStyle(height: 0.0),
-              filled: true,
-              // fillColor: fillColor,
-              alignLabelWithHint: true,
-              // contentPadding: contentPadding,
+        const SizedBox(width: 8.0),
 
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide.none,
+        Expanded(
+          child: SizedBox(
+            height: 45,
+            child: TextField(
+              controller: controller,
+              keyboardType: keyboardType,
+              decoration: InputDecoration(
+                hintText: hintText,
+                hintStyle: const TextStyle(height: 0.0),
+
+                // input값 색 변경 코드
+                filled: true,
+                fillColor: Colors.deepOrangeAccent, // 배경색 설정
+                alignLabelWithHint: true,
+
+
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 15.0,
+                  horizontal: 15.0,
+                ), // 텍스트 수직, 수평 정렬
+
+
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide.none,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide.none,
+                ),
               ),
             ),
           ),
@@ -133,3 +145,4 @@ class CustomTextField extends TextFieldWithController {
     );
   }
 }
+
