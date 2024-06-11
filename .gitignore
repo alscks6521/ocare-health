@@ -1,0 +1,232 @@
+# Flutter/Dart/Pub related
+**/build/
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+/build/
+**/build/
+
+# IntelliJ related
+.idea/
+*.iml
+
+# VS Code related
+.vscode/
+
+# Mac related
+*.DS_Store
+
+# Windows related
+*.exe
+*.dll
+*.bat
+*.pdb
+*.tmp
+*.obj
+*.o
+
+# Linux related
+*.so
+
+# Android related
+**/android/app/debug
+**/android/app/profile
+**/android/app/release
+
+# iOS related
+**/ios/Flutter/App.framework
+**/ios/Flutter/Flutter.framework
+**/ios/Flutter/Flutter.podspec
+**/ios/ServiceDefinitions.json
+**/ios/Runner/GeneratedPluginRegistrant.*
+
+# Android Studio
+.idea
+.gradle
+/local.properties
+.DS_Store
+/Android
+*.iml
+
+# Miscellaneous
+*.log
+*.lock
+*.pyc
+*.swp
+*.zip
+*.tar.gz
+*.crt
+*.pem
+*.p12
+*.jks
+*.keystore
+
+# Obsolete files
+*.orig
+*.rej
+*~ 
+**/flutter_*.state
+**/.android
+**/.ios
+**/.gradle
+**/.metadata
+**/.packages
+**/.flutter-plugins-dependencies
+**/.flutter-plugins
+**/pubspec.lock
+**/.dart_tool/
+**/.idea
+**/assets/AssetManifest.json
+**/assets/FontManifest.json
+**/assets/LICENSE
+**/pubspec.lock
+**/web/.dart_tool/
+**/web/.packages
+**/web/flutter_*.state
+**/web/.flutter-plugins-dependencies
+**/web/.flutter-plugins
+**/web/.dart_tool/
+**/web/.packages
+**/web/flutter_*.state
+**/web/.flutter-plugins-dependencies
+**/web/.flutter-plugins
+
+# Flutter generated files
+**/ios/.generated
+**/android/.generated
+**/web/.generated
+**/lib/.generated
+**/macos/.generated
+**/windows/.generated
+**/linux/.generated
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# VS Code
+.vscode/
+
+# Flutter specific
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.DS_Store
+
+# Pub related
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+
+# Cache directories
+.cache
+tmp/
+
+# Web related
+.html
+.dart_tool/
+.packages
+.web/
+
+# Windows related
+*.exe
+*.dll
+*.bat
+*.log
+
+# macOS related
+.DS_Store
+
+# # Flutter 관련 파일 및 디렉토리
+# .dart_tool/
+# .flutter-plugins
+# .flutter-plugins-dependencies
+# .packages
+# .pub-cache/
+# .pub/
+# build/
+# lib/generated_plugin_registrant.dart
+
+# # Android 관련 파일 및 디렉토리
+# android/.gradle
+# android/local.properties
+# android/key.properties
+# android/app/build/
+# android/app/*.iml
+# android/app/local.properties
+# android/app/proguard-rules.pro
+# android/app/google-services.json
+# android/app/build.gradle
+# android/app/src/main/res/drawable/
+# android/app/src/main/res/mipmap-*/
+# android/app/src/main/AndroidManifest.xml
+# android/app/src/main/kotlin
+# android/app/src/main/java
+
+# # iOS 관련 파일 및 디렉토리
+# ios/.generated/
+# ios/Flutter/Generated.xcconfig
+# ios/Runner/GeneratedPluginRegistrant.*
+# ios/Runner.xcodeproj/project.pbxproj
+# ios/Runner.xcodeproj/xcshareddata/
+# ios/Runner.xcworkspace/contents.xcworkspacedata
+# ios/Runner/Runner-Bridging-Header.h
+# ios/Runner/Assets.xcassets
+
+# # Linux 관련 파일 및 디렉토리
+# linux/flutter/generated_plugin_registrant.cc
+# linux/flutter/generated_plugin_registrant.h
+# linux/flutter/generated_plugins.cmake
+
+# # macOS 관련 파일 및 디렉토리
+# macos/Flutter/ephemeral
+# macos/Flutter/GeneratedPluginRegistrant.swift
+# macos/Flutter/Flutter-Debug.xcconfig
+# macos/Flutter/Flutter-Release.xcconfig
+# macos/Flutter/Flutter-Profile.xcconfig
+
+# # 웹 관련 파일 및 디렉토리
+# web/index.html
+# web/manifest.json
+# web/favicon.png
+# web/icons/
+
+# # 윈도우 관련 파일 및 디렉토리
+# windows/flutter/generated_plugin_registrant.cc
+# windows/flutter/generated_plugin_registrant.h
+# windows/flutter/generated_plugins.cmake
+
+# # 경고 및 에러를 발생시키는 파일들
+# .dart_tool/**/app.dill
+# build/**/zip-cache/
+# build/**/merged_native_libs/
+# build/**/outputs/apk/
+
+# # 기타 파일 및 디렉토리
+# .idea/
+# .vscode/
+# *.iml
+# *.ipr
+# *.iws
+# .DS_Store
+# Thumbs.db
+
+# # Dart 중간 표현 파일
+# .dart_tool/**/app.dill
+
+# # Android 빌드 관련 파일
+# build/**/merged_native_libs/
+# build/**/outputs/apk/
+
+# # APK 파일과 SO 파일
+# *.apk
+# *.so
