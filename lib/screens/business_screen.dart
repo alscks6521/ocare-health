@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:bubble/bubble.dart';
 import 'package:loading_indicator/loading_indicator.dart';
+import 'package:ocare/screens/consts.dart';
 import '../business/screens/nutritional_dialog.dart';
 import '../widgets/app_bar.dart';
 
@@ -30,11 +31,9 @@ class _BusinessScreenState extends State<BusinessScreen> {
   }
 
   Future<void> _recomNutritional() async {
-
-    var FOOD_API = "";
     // 증상
     var url =
-    Uri.parse('http://openapi.foodsafetykorea.go.kr/api/$FOOD_API/C003/json/1/10/PRDLST_NM=혈압');
+        Uri.parse('http://openapi.foodsafetykorea.go.kr/api/$FOOD_API/C003/json/1/10/PRDLST_NM=혈압');
 
     var response = await http.get(url);
 
@@ -69,9 +68,6 @@ class _BusinessScreenState extends State<BusinessScreen> {
     });
     await Future.delayed(const Duration(seconds: 2));
 
-    // open ai의 api키를 입력해주세요
-    var OPENAI_API = "";
-
     final response = await http.post(
       Uri.parse('https://api.openai.com/v1/chat/completions'),
       headers: {
@@ -84,7 +80,7 @@ class _BusinessScreenState extends State<BusinessScreen> {
           {
             'role': 'system',
             'content':
-            '당신은 건강 관련 질문, 사용자의 현재 몸 상태, 소개 등에 대해 답변해야 합니다. 답변은 300자 내외로 간결하되, 어르신이 이해하기 쉽고 예의 바른 언어로 작성해 주세요. 존댓말을 사용하고, 어려운 의학 용어는 평이한 말로 풀어서 설명해 주세요. 만약 질문이 건강, 몸 상태, 소개 등과 관련이 없다면, "죄송하지만, 건강이나 몸 상태, 소개 등에 관해 더 자세히 말씀해 주시면 제가 잘 이해하고 도와드릴 수 있을 것 같습니다."라고 친절하게 답변해 주세요.',
+                '당신은 건강 관련 질문, 사용자의 현재 몸 상태, 소개 등에 대해 답변해야 합니다. 답변은 300자 내외로 간결하되, 어르신이 이해하기 쉽고 예의 바른 언어로 작성해 주세요. 존댓말을 사용하고, 어려운 의학 용어는 평이한 말로 풀어서 설명해 주세요. 만약 질문이 건강, 몸 상태, 소개 등과 관련이 없다면, "죄송하지만, 건강이나 몸 상태, 소개 등에 관해 더 자세히 말씀해 주시면 제가 잘 이해하고 도와드릴 수 있을 것 같습니다."라고 친절하게 답변해 주세요.',
           },
           {'role': 'user', 'content': message},
         ],
@@ -105,7 +101,7 @@ class _BusinessScreenState extends State<BusinessScreen> {
           _messages.add({
             'role': 'assistant',
             'content':
-            '어르신, 건강이나 몸 상태, 소개 등에 관해 더 자세히 말씀해 주시면 제가 잘 이해하고 도와드릴 수 있을 것 같습니다. 어르신의 상태를 더 잘 파악하고 싶습니다.'
+                '어르신, 건강이나 몸 상태, 소개 등에 관해 더 자세히 말씀해 주시면 제가 잘 이해하고 도와드릴 수 있을 것 같습니다. 어르신의 상태를 더 잘 파악하고 싶습니다.'
           });
         });
       } else {
@@ -133,7 +129,6 @@ class _BusinessScreenState extends State<BusinessScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const AppbarWidget(title: 'Ai'),
-
                 const SizedBox(height: 20),
                 Container(
                   width: double.infinity,
@@ -327,16 +322,16 @@ class _BusinessScreenState extends State<BusinessScreen> {
                               onPressed: isButtonDisabled
                                   ? null
                                   : () {
-                                setState(() {
-                                  isButtonDisabled = true;
-                                });
-                                _sendMessage();
-                                Future.delayed(const Duration(seconds: 3), () {
-                                  setState(() {
-                                    isButtonDisabled = false;
-                                  });
-                                });
-                              },
+                                      setState(() {
+                                        isButtonDisabled = true;
+                                      });
+                                      _sendMessage();
+                                      Future.delayed(const Duration(seconds: 3), () {
+                                        setState(() {
+                                          isButtonDisabled = false;
+                                        });
+                                      });
+                                    },
                               child: const Text(
                                 '전송',
                                 style: TextStyle(
