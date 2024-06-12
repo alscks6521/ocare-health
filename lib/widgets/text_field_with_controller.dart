@@ -72,7 +72,7 @@ class TextFieldWithController extends StatelessWidget {
 
 /// 텍스트필드 상속받는 class파일 입니다
 class CustomTextField extends TextFieldWithController {
-  const CustomTextField({
+  CustomTextField({
     super.key,
     required String label,
     required String hintText,
@@ -111,50 +111,60 @@ class CustomTextField extends TextFieldWithController {
         Text(
           label,
           style: const TextStyle(
-            //기본 텍스트 크기 설정 부분
             fontSize: 20.0,
             fontWeight: FontWeight.bold,
           ),
         ),
         Padding(padding: labelPadding),
         Expanded(
-          child: SizedBox(
-            // height: textFieldHeight,
-            // 일단 높이 값 설정하는 부분.
-            height: 55,
-
-            child: TextField(
-              controller: controller,
-              keyboardType: keyboardType,
-              decoration: InputDecoration(
-                hintText: hintText,
-                hintStyle: const TextStyle(height: 0.0),
-                filled: true,
-
-                // 컬러 설정. 인풋 안 값 설정하는 부분.
-                fillColor: Colors.grey[200],
-
-                alignLabelWithHint: true,
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 15.0,
-                  horizontal: 15.0,
+          child: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return Focus(
+                onFocusChange: (hasFocus) {
+                  setState(() {
+                    _isFocused = hasFocus;
+                  });
+                },
+                child: TextField(
+                  controller: controller,
+                  keyboardType: keyboardType,
+                  style: textFieldTextStyle.copyWith(
+                    color: _isFocused ? Colors.blue : Colors.black,
+                  ),
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    hintStyle: const TextStyle(height: 0.0),
+                    filled: true,
+                    fillColor: Colors.grey[200],
+                    alignLabelWithHint: true,
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 15.0,
+                      horizontal: 15.0,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: const BorderSide(
+                        color: Colors.blue,
+                        width: 2.0,
+                      ),
+                    ),
+                  ),
+                  cursorColor: Colors.blue,
                 ),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide.none,
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-            ),
+              );
+            },
           ),
         ),
       ],
     );
   }
+
+  bool _isFocused = false;
 }
