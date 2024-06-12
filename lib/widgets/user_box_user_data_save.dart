@@ -67,54 +67,66 @@ class UserBoxUserDataSave extends StatelessWidget {
         return '상대방의 이름이 없습니다.';
       }
     }
+
+    // ------------------------------------------------
+
     // 인풋 높이 지정
     double height = 55;
-  double width = 182;
+    double width = 182;
 
     return Container(
-        decoration: BoxDecoration(
-
-        ),
+        decoration: BoxDecoration(),
         child: Padding(
           padding: const EdgeInsets.all(30.0), // 전체 패딩 값 설정
 
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-
-              SizedBox(
-                height: height,
-                width: width,
-                child: CustomTextField(
-                  label: '체중',
-                  hintText: '${user.weight}',
-                  controller: weightController,
-                  keyboardType: TextInputType.number,
-                ),
-              ),
-              SizedBox(height: 18,),
-              SizedBox(
-                height: height,
-                child: CustomTextField(
-                  label: '나이',
-                  hintText: '${user.age}',
-                  controller: ageController,
-                  keyboardType: TextInputType.number,
-                ),
+              CustomTextField(
+                label: '혈당:',
+                hintText: '',
+                controller: bloodSugarController,
+                keyboardType: TextInputType.number,
+                labelPadding: const EdgeInsets.only(right: 48.0),
               ),
               SizedBox(
-                height: height,
-                child: CustomTextField(
-                  label: '체중',
-                  hintText: '${user.weight}',
-                  controller: weightController,
-                ),
+                height: 28,
               ),
 
+              CustomTextField(
+                label: '이완기 : ',
+                hintText: '',
+                controller: diastolicController,
+                keyboardType: TextInputType.number,
 
+                // 3글자 2글자 font size 20 기준 = 48 - 16 -> 변수로 로직 만들어서 사용해도 될듯
+                labelPadding: const EdgeInsets.only(right: 16.0),
+              ),
+              SizedBox(
+                height: 28,
+              ),
+              CustomTextField(
+                label: '수축기 : ',
+                hintText: '',
+                controller: systolicController,
+                keyboardType: TextInputType.number,
 
-
+                // 3글자 2글자 font size 20 기준 = 48 - 16 -> 변수로 로직 만들어서 사용해도 될듯
+                labelPadding: const EdgeInsets.only(right: 16.0),
+              ),
+              SizedBox(
+                height: 28,
+              ),
+              CustomTextField(
+                label: '체중:',
+                hintText: '',
+                controller: weightController,
+                keyboardType: TextInputType.number,
+                labelPadding: const EdgeInsets.only(right: 48.0),
+              ),
+              SizedBox(
+                height: 28,
+              ),
 
               /// 저장 로직입니다.
               Center(
@@ -124,16 +136,12 @@ class UserBoxUserDataSave extends StatelessWidget {
                     ElevatedButton(
                       onPressed: () async {
                         FirestoreServiceCustom firestoreService =
-                            FirestoreServiceCustom();
-                        await firestoreService.saveToFirestoreCustom(
-                          nameController: nameController,
-                          idController: idController,
-                          ageController: ageController,
-                          weightController: weightController,
-                          guardianController: guardianController,
-                          systolicController: systolicController,
-                          diastolicController: diastolicController,
-                          bloodSugarController: bloodSugarController,
+                        FirestoreServiceCustom();
+                        await firestoreService.saveCustomUserData(
+                          bloodSugar: int.tryParse(bloodSugarController.text) ?? 0,
+                          diastolic: int.tryParse(diastolicController.text) ?? 0,
+                          systolic: int.tryParse(systolicController.text) ?? 0,
+                          weight: int.tryParse(weightController.text) ?? 0,
                         );
                       },
                       style: ElevatedButton.styleFrom(

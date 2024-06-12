@@ -63,6 +63,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   // 위 코드는 firestore에 데이터를 저장하는 로직. 가장 핵심인 부분. 위의 입력값들을 각 형식에 맞게 firestore에 저장하는 역할을 하기때문에. 가장 핵심기능이라고 할수있음.
   // 데이터를 가져온후  ,
   /// 테스트용 코드 작성. 지정된 uid를 사용해서 해당 uid는 루트 데이터 베이스를 사용할 수 있게 코드 변경.
+  ///
+  /// 유저 박스에서 사용되고 있기에 필요하지 않은 코드.
   Future<void> _saveToFirestore() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -161,6 +163,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               systolicController: _systolicController,
               diastolicController: _diastolicController,
               bloodSugarController: _bloodSugarController,
+              /// save로직 포함.
             ),
 
             const SizedBox(height: 16.0),
