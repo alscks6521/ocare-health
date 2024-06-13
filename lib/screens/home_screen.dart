@@ -1,3 +1,5 @@
+
+
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -19,24 +21,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  GuardianUserModel guardianUser;
 
-  late GuardianUserModel guardianUser;
+  _HomeScreenState() : guardianUser = GuardianUserModel(
+    name: '',
+    id: '',
+    age: 0,
+    weight: 0,
+    guardian: '',
+    systolic: 0,
+    diastolic: 0,
+    bloodSugar: 0,
+    nickname: '',
+    email: '',
+  );
 
   @override
   void initState() {
     super.initState();
 
     _initUserModel();
-
     _initGuardianUserModel(); // 가디언 초기화 함수
 
     // 종료되고 실행되었을때 랜덤 배열 로직
-
-
     _goodFoods = getRandomGoodFoods(3);
     _badFoods = getRandomBadFoods(2);
   }
-
 
   Future<void> _initGuardianUserModel() async {
     final currentUserUID = FirebaseAuth.instance.currentUser?.uid;
@@ -64,19 +74,6 @@ class _HomeScreenState extends State<HomeScreen> {
         email: data?['email'] ?? '',
         friends: List<String>.from(data?['friends'] ?? []),
         timestamp: data?['timestamp'],
-      );
-    } else {
-      guardianUser = GuardianUserModel(
-        name: '',
-        id: '',
-        age: 0,
-        weight: 0,
-        guardian: '',
-        systolic: 0,
-        diastolic: 0,
-        bloodSugar: 0,
-        nickname: '',
-        email: '',
       );
     }
   }
@@ -188,7 +185,6 @@ class _HomeScreenState extends State<HomeScreen> {
   /// 유저박스
   ///
   Widget _buildUserBox(BuildContext context) {
-
     final user = Provider.of<UserModel>(context);
 
     return GestureDetector(
@@ -426,6 +422,12 @@ class _HomeScreenState extends State<HomeScreen> {
       gaugeColor = const Color(0xFF276AEE); // 정상일 경우 파란색
     }
 
+
+
+
+
+
+
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -498,7 +500,6 @@ class _HomeScreenState extends State<HomeScreen> {
   ///
   Widget _buildRecentRecordBox() {
     final userModel = Provider.of<UserModel>(context);
-
 
     return GestureDetector(
         onTap: () {
@@ -718,20 +719,21 @@ class UserGuardBox extends StatelessWidget {
   final UserModel user;
   final GuardianUserModel guardianUser;
 
-  const UserGuardBox({Key? key, required this.user, required this.guardianUser}) : super(key: key);
+  const UserGuardBox({Key? key, required this.user, required this.guardianUser})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final currentUserUID = FirebaseAuth.instance.currentUser?.uid;
-    final guardianUID = currentUserUID == 'KWjegweDuEhSVN9I6D8iRnh22kc2' ? 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2' : 'KWjegweDuEhSVN9I6D8iRnh22kc2';
+    final guardianUID = currentUserUID == 'KWjegweDuEhSVN9I6D8iRnh22kc2'
+        ? 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2'
+        : 'KWjegweDuEhSVN9I6D8iRnh22kc2';
 
     return ConstrainedBox(
       constraints: BoxConstraints(
         minWidth: double.infinity,
         minHeight: 200,
       ),
-
-
       child: Stack(
         children: [
           Container(
@@ -882,7 +884,6 @@ class UserGuardBox extends StatelessWidget {
         ],
       ),
     );
-
   }
 }
 
