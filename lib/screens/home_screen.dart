@@ -7,6 +7,7 @@ import 'package:ocare/screens/page/user_data_save_page.dart';
 import 'package:ocare/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/guardian_user_model.dart';
 import '../models/user_model.dart';
 import '../router/app_router.dart';
 
@@ -18,13 +19,66 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
+  late GuardianUserModel guardianUser;
+
   @override
   void initState() {
     super.initState();
+
     _initUserModel();
+
+    _initGuardianUserModel(); // 가디언 초기화 함수
+
     // 종료되고 실행되었을때 랜덤 배열 로직
+
+
     _goodFoods = getRandomGoodFoods(3);
     _badFoods = getRandomBadFoods(2);
+  }
+
+
+  Future<void> _initGuardianUserModel() async {
+    final currentUserUID = FirebaseAuth.instance.currentUser?.uid;
+    final guardianUID = currentUserUID == 'KWjegweDuEhSVN9I6D8iRnh22kc2'
+        ? 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2'
+        : 'KWjegweDuEhSVN9I6D8iRnh22kc2';
+
+    final snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(guardianUID)
+        .get();
+
+    if (snapshot.exists) {
+      final data = snapshot.data();
+      guardianUser = GuardianUserModel(
+        name: data?['name'] ?? '',
+        id: data?['id'] ?? '',
+        age: data?['age'] ?? 0,
+        weight: data?['weight'] ?? 0,
+        guardian: data?['guardian'] ?? '',
+        systolic: data?['systolic'] ?? 0,
+        diastolic: data?['diastolic'] ?? 0,
+        bloodSugar: data?['bloodSugar'] ?? 0,
+        nickname: data?['nickname'] ?? '',
+        email: data?['email'] ?? '',
+        friends: List<String>.from(data?['friends'] ?? []),
+        timestamp: data?['timestamp'],
+      );
+    } else {
+      guardianUser = GuardianUserModel(
+        name: '',
+        id: '',
+        age: 0,
+        weight: 0,
+        guardian: '',
+        systolic: 0,
+        diastolic: 0,
+        bloodSugar: 0,
+        nickname: '',
+        email: '',
+      );
+    }
   }
 
   // user box ui animation offset init
@@ -134,6 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
   /// 유저박스
   ///
   Widget _buildUserBox(BuildContext context) {
+
     final user = Provider.of<UserModel>(context);
 
     return GestureDetector(
@@ -257,7 +312,7 @@ class _HomeScreenState extends State<HomeScreen> {
               0,
               0,
             ),
-            child: UserGuardBox(user: user),
+            child: UserGuardBox(user: user, guardianUser: guardianUser),
           ),
           AnimatedContainer(
             duration: Duration(milliseconds: 200),
@@ -661,16 +716,22 @@ class UserInfoCard extends StatelessWidget {
 
 class UserGuardBox extends StatelessWidget {
   final UserModel user;
+  final GuardianUserModel guardianUser;
 
-  const UserGuardBox({Key? key, required this.user}) : super(key: key);
+  const UserGuardBox({Key? key, required this.user, required this.guardianUser}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final currentUserUID = FirebaseAuth.instance.currentUser?.uid;
+    final guardianUID = currentUserUID == 'KWjegweDuEhSVN9I6D8iRnh22kc2' ? 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2' : 'KWjegweDuEhSVN9I6D8iRnh22kc2';
+
     return ConstrainedBox(
       constraints: BoxConstraints(
         minWidth: double.infinity,
         minHeight: 200,
       ),
+
+
       child: Stack(
         children: [
           Container(
@@ -712,7 +773,7 @@ class UserGuardBox extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: '${user.guardian}',
+                              text: '${guardianUser.name}',
                               style: TextStyle(
                                 fontSize: 20.0, // 이완 수축 텍스트 크기
                                 color: Colors.black,
@@ -747,7 +808,7 @@ class UserGuardBox extends StatelessWidget {
                               style: TextStyle(fontSize: 14.0),
                             ),
                             Text(
-                              '${user.diastolic}/ ${user.systolic}',
+                              '${guardianUser.diastolic}/ ${guardianUser.systolic}',
                               style: TextStyle(
                                 fontSize: 28.0,
                                 fontWeight: FontWeight.bold,
@@ -759,7 +820,7 @@ class UserGuardBox extends StatelessWidget {
                               style: TextStyle(fontSize: 20.0),
                             ),
                             Text(
-                              '${user.bloodSugar}',
+                              '${guardianUser.bloodSugar}',
                               style: TextStyle(
                                 fontSize: 28.0,
                                 fontWeight: FontWeight.bold,
@@ -821,6 +882,7 @@ class UserGuardBox extends StatelessWidget {
         ],
       ),
     );
+
   }
 }
 

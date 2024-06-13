@@ -35,50 +35,6 @@ class UserModel with ChangeNotifier {
   });
 
 
-  // usermodel 주석화 및 dispose가 추가적으로 왜 주석화 되었는지, 다른곳에서 선언되어 주석화를 했는지 확인 요청
-  // 질문에 긍정일 경우 true 반환
-  // UserModel(
-  //     {required this.name,
-  //     required this.id,
-  //     required this.age,
-  //     required this.weight,
-  //     required this.guardian,
-  //     required this.systolic,
-  //     required this.diastolic,
-  //     required this.bloodSugar,
-  //     required this.nickname,
-  //     required this.email,
-  //     this.friends,
-  //     this.timestamp}) {
-  //   _subscription = FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(FirebaseAuth.instance.currentUser?.uid)
-  //       .snapshots()
-  //       .listen((snapshot) {
-  //     if (snapshot.exists) {
-  //       final userData = snapshot.data();
-  //       name = userData?['name'] ?? '';
-  //       id = userData?['id'] ?? '';
-  //       age = userData?['age'] ?? 0;
-  //       weight = userData?['weight'] ?? 0;
-  //       guardian = userData?['guardian'] ?? '';
-  //       systolic = userData?['systolic'] ?? 0;
-  //       diastolic = userData?['diastolic'] ?? 0;
-  //       bloodSugar = userData?['bloodSugar'] ?? 0;
-  //       nickname = userData?['nickname'] ?? '';
-  //       email = userData?['email'] ?? '';
-  //       timestamp = userData?['timestamp']; // 이 부분을 추가합니다.
-  //
-  //       notifyListeners();
-  //     }
-  //   });
-  // }
-
-  // @override
-  // void dispose() {
-  //   _subscription.cancel();
-  //   super.dispose();
-  // }
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
