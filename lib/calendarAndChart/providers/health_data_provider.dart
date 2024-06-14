@@ -26,27 +26,36 @@ class HealthDataProvider with ChangeNotifier {
 
   // 파이어베이스 데이터 불러오기
   Future<void> loadDataFromFirebase() async {
-    final userId = 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2'; // 사용자 ID설정
-    final snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userId)
-        .collection('user_data')
-        .get();
+    try {
+      final usersCollection = FirebaseFirestore.instance.collection('users');
+      final userDoc = usersCollection.doc('KWjegweDuEhSVN9I6D8iRnh22kc2');
+      final userDataCollection = userDoc.collection('user_data');
+      final querySnapshot = await userDataCollection.get();
 
-    snapshot.docs.forEach((doc) {
-      final userModel = UserModel.fromMap(doc.data());
-      final healthData = HealthData(
-        date: userModel.timestamp!.toDate(),
-        systolicBP: userModel.systolic,
-        diastolicBP: userModel.diastolic,
-        bloodSugar: userModel.bloodSugar,
-      );
-      addHealthData(healthData);
-    });
+      print('Documents retrieved: ${querySnapshot.docs.length}'); // 가져온 문서 개수 로그 출력
 
-    notifyListeners();
+
+      final List<HealthData> healthDataList = [];
+
+      for (final doc in querySnapshot.docs) {
+        final data = doc.data();
+        print('Document data: $data'); // 각 문서의 데이터 로그 출력
+
+        final healthData = HealthData(
+          date: (data['timestamp'] as Timestamp).toDate(), // timestamp 값을 DateTime으로 변환
+          systolicBP: data['systolic'],
+          diastolicBP: data['diastolic'],
+          bloodSugar: data['bloodSugar'],
+        );
+        healthDataList.add(healthData);
+      }
+      print('Health data loaded: $healthDataList'); // 가져온 건강 데이터 로그 출력
+
+      // Update the health data in the provider
+      // ...
+    } catch (e) {
+      print('Error loading data from Firebase: $e');
+    }
   }
 
-
 }
-

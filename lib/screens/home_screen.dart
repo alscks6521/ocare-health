@@ -1,17 +1,13 @@
-
-
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
-import 'package:go_router/go_router.dart';
 import 'package:ocare/screens/page/user_data_save_page.dart';
 import 'package:ocare/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/guardian_user_model.dart';
 import '../models/user_model.dart';
-import '../router/app_router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,18 +19,19 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   GuardianUserModel guardianUser;
 
-  _HomeScreenState() : guardianUser = GuardianUserModel(
-    name: '',
-    id: '',
-    age: 0,
-    weight: 0,
-    guardian: '',
-    systolic: 0,
-    diastolic: 0,
-    bloodSugar: 0,
-    nickname: '',
-    email: '',
-  );
+  _HomeScreenState()
+      : guardianUser = GuardianUserModel(
+          name: '',
+          id: '',
+          age: 0,
+          weight: 0,
+          guardian: '',
+          systolic: 0,
+          diastolic: 0,
+          bloodSugar: 0,
+          nickname: '',
+          email: '',
+        );
 
   @override
   void initState() {
@@ -421,12 +418,6 @@ class _HomeScreenState extends State<HomeScreen> {
       progress = 0.6; // 정상: 그 외의 경우 진행 비율 60%
       gaugeColor = const Color(0xFF276AEE); // 정상일 경우 파란색
     }
-
-
-
-
-
-
 
     return Container(
       padding: const EdgeInsets.all(16.0),
