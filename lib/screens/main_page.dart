@@ -4,7 +4,6 @@ import 'package:ocare/constants/constants.dart';
 import 'package:ocare/models/friend_kakao.dart';
 import 'package:ocare/models/picker_item.dart';
 import 'package:ocare/temple/temple.dart';
-import 'package:ocare/utils/font_styles.dart';
 import 'package:provider/provider.dart';
 import 'package:ocare/models/user_model.dart';
 
@@ -65,9 +64,7 @@ class _MainPageState extends State<MainPage> {
                     MaterialPageRoute(
                       builder: (context) => FriendPage(
                         items: friends.elements!
-                            .map((friend) => PickerItem(
-                                friend.uuid,
-                                friend.profileNickname ?? '',
+                            .map((friend) => PickerItem(friend.uuid, friend.profileNickname ?? '',
                                 friend.profileThumbnailImage))
                             .toList(),
                       ),
@@ -83,8 +80,7 @@ class _MainPageState extends State<MainPage> {
                   // 메시지를 보낼 친구의 UUID 목록
                   List<String> receiverUuids = selectedItems;
                   setState(() {
-                    Provider.of<UserModel>(context, listen: false).friends =
-                        selectedItems;
+                    Provider.of<UserModel>(context, listen: false).friends = selectedItems;
                   });
                 }
               },
@@ -98,8 +94,7 @@ class _MainPageState extends State<MainPage> {
 
                 // 기본 템플릿으로 메시지 보내기
                 try {
-                  MessageSendResult result =
-                      await TalkApi.instance.sendDefaultMessage(
+                  MessageSendResult result = await TalkApi.instance.sendDefaultMessage(
                     receiverUuids: receiverUuids,
                     template: template,
                   );

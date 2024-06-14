@@ -1,14 +1,11 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
-import 'package:go_router/go_router.dart';
 import 'package:ocare/screens/page/user_data_save_page.dart';
 import 'package:ocare/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/user_model.dart';
-import '../router/app_router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -47,31 +44,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(25.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const AppbarWidget(title: '홈'),
-                const SizedBox(height: 20.0),
-                Consumer<UserModel>(
-                  builder: (context, userModel, child) {
-                    return _buildUserBox(context);
-                  },
-                ),
-                const SizedBox(height: 24.0),
-                Consumer<UserModel>(
-                  builder: (context, userModel, child) {
-                    return _buildHealthPositionBox(context);
-                  },
-                ),
-                const SizedBox(height: 24.0),
-                _buildRecentRecordBox(),
-              ],
-            ),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(25.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const AppbarWidget(title: '홈'),
+              const SizedBox(height: 20.0),
+              Consumer<UserModel>(
+                builder: (context, userModel, child) {
+                  return _buildUserBox(context);
+                },
+              ),
+              const SizedBox(height: 24.0),
+              Consumer<UserModel>(
+                builder: (context, userModel, child) {
+                  return _buildHealthPositionBox(context);
+                },
+              ),
+              const SizedBox(height: 24.0),
+              _buildRecentRecordBox(),
+            ],
           ),
         ),
       ),
@@ -100,8 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.of(context).pop();
                 if (username.isNotEmpty) {
                   // 업데이트 한거 firebase의 username을 넣는다.
-                  final userModel =
-                      Provider.of<UserModel>(context, listen: false);
+                  final userModel = Provider.of<UserModel>(context, listen: false);
                   userModel.name = username;
                   _saveToFirestore();
                 }
@@ -123,10 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final username = userModel.name;
 
       // 유저이름을 넣는 로직,
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .update({'name': username});
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({'name': username});
     }
   }
 
@@ -140,8 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
       onHorizontalDragUpdate: (details) {
         setState(() {
           _slideOffset += details.delta.dx;
-          _slideOffset =
-              _slideOffset.clamp(-MediaQuery.of(context).size.width * 2, 0);
+          _slideOffset = _slideOffset.clamp(-MediaQuery.of(context).size.width * 2, 0);
         });
       },
       onHorizontalDragEnd: (details) {
@@ -162,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Stack(
         children: [
           AnimatedContainer(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             transform: Matrix4.translationValues(_slideOffset, 0, 0),
             child: Container(
               padding: const EdgeInsets.all(27.0),
@@ -184,26 +174,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.person,
                           color: Color(0xFF276AEE),
                           size: 56.49,
                         ),
                         Text(
                           '${user.name} 님',
-                          style: TextStyle(fontSize: 20.0),
+                          style: const TextStyle(fontSize: 20.0),
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 0,
                     ),
-                    VerticalDivider(
+                    const VerticalDivider(
                       color: Colors.grey,
                       thickness: 1.0,
                       width: 32.0,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 15,
                     ),
                     Expanded(
@@ -213,29 +203,29 @@ class _HomeScreenState extends State<HomeScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 '혈압',
                                 style: TextStyle(fontSize: 20.0),
                               ),
-                              Text(
+                              const Text(
                                 '이완/ 수축',
                                 style: TextStyle(fontSize: 14.0),
                               ),
                               Text(
                                 '${user.diastolic}/ ${user.systolic}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 28.0,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(height: 16.0), // 큰 줄 간격
-                              Text(
+                              const SizedBox(height: 16.0), // 큰 줄 간격
+                              const Text(
                                 '혈당',
                                 style: TextStyle(fontSize: 20.0),
                               ),
                               Text(
                                 '${user.bloodSugar}',
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 28.0,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -251,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           AnimatedContainer(
-            duration: Duration(milliseconds: 200),
+            duration: const Duration(milliseconds: 200),
             transform: Matrix4.translationValues(
               _slideOffset + MediaQuery.of(context).size.width,
               0,
@@ -260,7 +250,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: UserGuardBox(user: user),
           ),
           AnimatedContainer(
-            duration: Duration(milliseconds: 200),
+            duration: const Duration(milliseconds: 200),
             transform: Matrix4.translationValues(
               _slideOffset + MediaQuery.of(context).size.width * 2,
               0,
@@ -278,14 +268,14 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Center(
               child: AnimatedOpacity(
                 opacity: _slideOffset == 0 ? 1.0 : 0.0,
-                duration: Duration(milliseconds: 100),
+                duration: const Duration(milliseconds: 100),
                 child: Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.grey.withOpacity(0.5),
                   ),
-                  padding: EdgeInsets.all(8.0),
-                  child: Icon(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Icon(
                     Icons.arrow_forward_ios,
                     color: Colors.white,
                   ),
@@ -299,43 +289,19 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
 // 건강데이터 종류
-  List<String> goodFoods = [
-    '당근',
-    '호박',
-    '고구마',
-    '브로콜리',
-    '시금치',
-    '토마토',
-    '파프리카',
-    '양배추',
-    '오이',
-    '가지'
-  ];
-  List<String> badFoods = [
-    '치킨',
-    '햄버거',
-    '피자',
-    '감자튀김',
-    '도넛',
-    '핫도그',
-    '소시지',
-    '베이컨',
-    '초콜릿바',
-    '캔디'
-  ];
+  List<String> goodFoods = ['당근', '호박', '고구마', '브로콜리', '시금치', '토마토', '파프리카', '양배추', '오이', '가지'];
+  List<String> badFoods = ['치킨', '햄버거', '피자', '감자튀김', '도넛', '핫도그', '소시지', '베이컨', '초콜릿바', '캔디'];
 
 // 몸에 좋은 음식 가져오기
   String getRandomGoodFoods(int count) {
     final random = Random();
-    return List.generate(
-        count, (_) => goodFoods[random.nextInt(goodFoods.length)]).join(', ');
+    return List.generate(count, (_) => goodFoods[random.nextInt(goodFoods.length)]).join(', ');
   }
 
 // 몸에 안좋은 음식 가져오기
   String getRandomBadFoods(int count) {
     final random = Random();
-    return List.generate(
-        count, (_) => badFoods[random.nextInt(badFoods.length)]).join(', ');
+    return List.generate(count, (_) => badFoods[random.nextInt(badFoods.length)]).join(', ');
   }
 
   // 건강위치 박스
@@ -444,12 +410,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildRecentRecordBox() {
     final userModel = Provider.of<UserModel>(context);
 
-
     return GestureDetector(
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => UserDataSavePage()),
+            MaterialPageRoute(builder: (context) => const UserDataSavePage()),
           );
         },
         child: Container(
@@ -511,15 +476,13 @@ class _HomeScreenState extends State<HomeScreen> {
     if (timestamp != null) {
       final dateTime = timestamp.toDate();
       final hourString = dateTime.hour.toString().padLeft(2, '0'); // 시간에 0 추가
-      final minuteString =
-          dateTime.minute.toString().padLeft(2, '0'); // 분에 0 추가
+      final minuteString = dateTime.minute.toString().padLeft(2, '0'); // 분에 0 추가
       return Text(
         '$hourString:$minuteString',
         style: const TextStyle(fontSize: 30.0, color: Color(0xFF276AEE)),
       );
     } else {
-      return const Text('N/A',
-          style: TextStyle(fontSize: 30.0, color: Color(0xFF276AEE)));
+      return const Text('N/A', style: TextStyle(fontSize: 30.0, color: Color(0xFF276AEE)));
     }
   }
 }
@@ -533,18 +496,15 @@ class UserInfoCard extends StatelessWidget {
   final UserModel user;
   final double slideOffset;
 
-  const UserInfoCard({Key? key, required this.user, required this.slideOffset})
-      : super(key: key);
+  const UserInfoCard({super.key, required this.user, required this.slideOffset});
 
   Future<String> getOtherUserName(String userId) async {
     String otherUserId = userId == 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2'
         ? 'KWjegweDuEhSVN9I6D8iRnh22kc2'
         : 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2';
 
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(otherUserId)
-        .get();
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection('users').doc(otherUserId).get();
 
     if (snapshot.exists) {
       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
@@ -556,7 +516,7 @@ class UserInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 500,
       height: 200,
       child: Stack(
@@ -584,21 +544,20 @@ class UserInfoCard extends StatelessWidget {
                   future: getOtherUserName(user.name),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
+                      return const CircularProgressIndicator();
                     } else if (snapshot.hasError) {
                       return Text('에러: ${snapshot.error}');
                     } else {
                       String otherUserName = snapshot.data?.trim() ?? '';
                       if (false) {
-                        return Text(
+                        return const Text(
                           '연결되지 않음',
-                          style: TextStyle(
-                              fontSize: 24.0, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
                         );
                       } else {
                         return RichText(
                           textAlign: TextAlign.center,
-                          text: TextSpan(
+                          text: const TextSpan(
                             children: [
                               TextSpan(
                                 text: '연동된 파트너의 계정이 없습니다',
@@ -638,14 +597,14 @@ class UserInfoCard extends StatelessWidget {
             child: Center(
               child: AnimatedOpacity(
                 opacity: slideOffset == 0 ? 1.0 : 0.0,
-                duration: Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 200),
                 child: Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.grey.withOpacity(0.5),
                   ),
-                  padding: EdgeInsets.all(8.0),
-                  child: Icon(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Icon(
                     Icons.arrow_back_ios,
                     color: Colors.white,
                   ),
@@ -662,12 +621,12 @@ class UserInfoCard extends StatelessWidget {
 class UserGuardBox extends StatelessWidget {
   final UserModel user;
 
-  const UserGuardBox({Key? key, required this.user}) : super(key: key);
+  const UserGuardBox({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
     return ConstrainedBox(
-      constraints: BoxConstraints(
+      constraints: const BoxConstraints(
         minWidth: double.infinity,
         minHeight: 200,
       ),
@@ -694,7 +653,7 @@ class UserGuardBox extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.person,
                         color: Color(0xFF276AEE),
                         size: 56.49,
@@ -703,7 +662,7 @@ class UserGuardBox extends StatelessWidget {
                         textAlign: TextAlign.center,
                         text: TextSpan(
                           children: [
-                            TextSpan(
+                            const TextSpan(
                               text: '파트너의 정보\n',
                               style: TextStyle(
                                 fontSize: 15.0, // 혈압 텍스트 크기
@@ -712,8 +671,8 @@ class UserGuardBox extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: '${user.guardian}',
-                              style: TextStyle(
+                              text: user.guardian,
+                              style: const TextStyle(
                                 fontSize: 20.0, // 이완 수축 텍스트 크기
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -724,13 +683,13 @@ class UserGuardBox extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(width: 0),
-                  VerticalDivider(
+                  const SizedBox(width: 0),
+                  const VerticalDivider(
                     color: Colors.grey,
                     thickness: 1.0,
                     width: 32.0,
                   ),
-                  SizedBox(width: 15),
+                  const SizedBox(width: 15),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -738,29 +697,29 @@ class UserGuardBox extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
+                            const Text(
                               '혈압',
                               style: TextStyle(fontSize: 20.0),
                             ),
-                            Text(
+                            const Text(
                               '이완/ 수축',
                               style: TextStyle(fontSize: 14.0),
                             ),
                             Text(
                               '${user.diastolic}/ ${user.systolic}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 28.0,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 16.0), // 큰 줄 간격
-                            Text(
+                            const SizedBox(height: 16.0), // 큰 줄 간격
+                            const Text(
                               '혈당',
                               style: TextStyle(fontSize: 20.0),
                             ),
                             Text(
                               '${user.bloodSugar}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 28.0,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -781,14 +740,14 @@ class UserGuardBox extends StatelessWidget {
             child: Center(
               child: AnimatedOpacity(
                 opacity: _slideOffset == 0 ? 1.0 : 0.0,
-                duration: Duration(milliseconds: 100),
+                duration: const Duration(milliseconds: 100),
                 child: Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.grey.withOpacity(0.5),
                   ),
-                  padding: EdgeInsets.all(8.0),
-                  child: Icon(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Icon(
                     Icons.arrow_forward_ios,
                     color: Colors.white,
                   ),
@@ -803,14 +762,14 @@ class UserGuardBox extends StatelessWidget {
             child: Center(
               child: AnimatedOpacity(
                 opacity: _slideOffset == 0 ? 1.0 : 0.0,
-                duration: Duration(milliseconds: 100),
+                duration: const Duration(milliseconds: 100),
                 child: Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.grey.withOpacity(0.5),
                   ),
-                  padding: EdgeInsets.all(8.0),
-                  child: Icon(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Icon(
                     Icons.arrow_back_ios,
                     color: Colors.white,
                   ),
