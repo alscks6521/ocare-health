@@ -10,25 +10,24 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BottomAppBar(
-      height: 85,
-      color: Colors.transparent,
-      elevation: 0,
-      child: SafeArea(
-        child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 40),
-          decoration: BoxDecoration(
-            color: Theme.of(context).primaryColor,
-            borderRadius: BorderRadius.circular(26),
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+      height: 60,
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        borderRadius: BorderRadius.circular(26),
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).primaryColor.withOpacity(0.3),
+            spreadRadius: 0,
+            blurRadius: 6,
+            offset: const Offset(0, 3),
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
-            child: CustomBottomNavigationBar(
-              currentIndex: currentIndex,
-              onTap: (int idx) => _onItemTapped(idx, context),
-            ),
-          ),
-        ),
+        ],
+      ),
+      child: CustomBottomNavigationBar(
+        currentIndex: currentIndex,
+        onTap: (int idx) => _onItemTapped(idx, context),
       ),
     );
   }

@@ -1,13 +1,11 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/gestures.dart';
-import 'package:go_router/go_router.dart';
+import 'package:ocare/screens/page/user_data_save_page.dart';
 import 'package:ocare/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/user_model.dart';
-import '../router/app_router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -46,31 +44,29 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(25.0),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const AppbarWidget(title: '홈'),
-                const SizedBox(height: 20.0),
-                Consumer<UserModel>(
-                  builder: (context, userModel, child) {
-                    return _buildUserBox(context);
-                  },
-                ),
-                const SizedBox(height: 24.0),
-                Consumer<UserModel>(
-                  builder: (context, userModel, child) {
-                    return _buildHealthPositionBox(context);
-                  },
-                ),
-                const SizedBox(height: 24.0),
-                _buildRecentRecordBox(),
-              ],
-            ),
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(25.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const AppbarWidget(title: '홈'),
+              const SizedBox(height: 20.0),
+              Consumer<UserModel>(
+                builder: (context, userModel, child) {
+                  return _buildUserBox(context);
+                },
+              ),
+              const SizedBox(height: 24.0),
+              Consumer<UserModel>(
+                builder: (context, userModel, child) {
+                  return _buildHealthPositionBox(context);
+                },
+              ),
+              const SizedBox(height: 24.0),
+              _buildRecentRecordBox(),
+            ],
           ),
         ),
       ),
@@ -99,8 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.of(context).pop();
                 if (username.isNotEmpty) {
                   // 업데이트 한거 firebase의 username을 넣는다.
-                  final userModel =
-                      Provider.of<UserModel>(context, listen: false);
+                  final userModel = Provider.of<UserModel>(context, listen: false);
                   userModel.name = username;
                   _saveToFirestore();
                 }
@@ -113,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-/// save to firestore에 name저장 로직
+  /// save to firestore에 name저장 로직
   Future<void> _saveToFirestore() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
@@ -122,14 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
       final username = userModel.name;
 
       // 유저이름을 넣는 로직,
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .update({'name': username});
+      await FirebaseFirestore.instance.collection('users').doc(userId).update({'name': username});
     }
   }
-
-
 
   ///
   /// 유저박스
@@ -141,11 +131,15 @@ class _HomeScreenState extends State<HomeScreen> {
       onHorizontalDragUpdate: (details) {
         setState(() {
           _slideOffset += details.delta.dx;
-          _slideOffset = _slideOffset.clamp(-MediaQuery.of(context).size.width, 0);
+          _slideOffset = _slideOffset.clamp(-MediaQuery.of(context).size.width * 2, 0);
         });
       },
       onHorizontalDragEnd: (details) {
-        if (_slideOffset < -MediaQuery.of(context).size.width / 2) {
+        if (_slideOffset < -MediaQuery.of(context).size.width * 1.5) {
+          setState(() {
+            _slideOffset = -MediaQuery.of(context).size.width * 2;
+          });
+        } else if (_slideOffset < -MediaQuery.of(context).size.width / 2) {
           setState(() {
             _slideOffset = -MediaQuery.of(context).size.width;
           });
@@ -158,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Stack(
         children: [
           AnimatedContainer(
-            duration: Duration(milliseconds: 300),
+            duration: const Duration(milliseconds: 300),
             transform: Matrix4.translationValues(_slideOffset, 0, 0),
             child: Container(
               padding: const EdgeInsets.all(27.0),
@@ -176,91 +170,68 @@ class _HomeScreenState extends State<HomeScreen> {
               child: IntrinsicHeight(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                   children: [
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.person,
                           color: Color(0xFF276AEE),
                           size: 56.49,
                         ),
                         Text(
                           '${user.name} 님',
-                          style: TextStyle(fontSize: 20.0),
+                          style: const TextStyle(fontSize: 20.0),
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 0,
                     ),
-                    VerticalDivider(
+                    const VerticalDivider(
                       color: Colors.grey,
                       thickness: 1.0,
                       width: 32.0,
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 15,
                     ),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              const Text(
                                 '혈압',
-                                style: TextStyle(fontSize: 15.0),
+                                style: TextStyle(fontSize: 20.0),
                               ),
-                              SizedBox(width: 4.0),
+                              const Text(
+                                '이완/ 수축',
+                                style: TextStyle(fontSize: 14.0),
+                              ),
                               Text(
-                                '${user.systolic}',
-                                style: TextStyle(
-                                  fontSize: 25.0,
+                                '${user.diastolic}/ ${user.systolic}',
+                                style: const TextStyle(
+                                  fontSize: 28.0,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(width: 8.0),
-                              Text(
+                              const SizedBox(height: 16.0), // 큰 줄 간격
+                              const Text(
                                 '혈당',
-                                style: TextStyle(fontSize: 15.0),
+                                style: TextStyle(fontSize: 20.0),
                               ),
-                              SizedBox(width: 4.0),
                               Text(
                                 '${user.bloodSugar}',
-                                style: TextStyle(
-                                  fontSize: 25.0,
+                                style: const TextStyle(
+                                  fontSize: 28.0,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ],
-                          ),
-                          SizedBox(height: 8.0),
-                          Text(
-                            '이런 음식이 좋아요!',
-                            style: TextStyle(fontSize: 17.0),
-                          ),
-                          Text(
-                            _goodFoods,
-                            style: TextStyle(
-                              fontSize: 15.0,
-                              color: Colors.grey,
-                            ),
-                          ),
-                          SizedBox(height: 8.0),
-                          Text(
-                            '이런 음식이 나빠요!',
-                            style: TextStyle(fontSize: 17.0),
-                          ),
-                          Text(
-                            _badFoods,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.grey,
-                            ),
-                          ),
+                          )
                         ],
                       ),
                     ),
@@ -269,15 +240,26 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-
           AnimatedContainer(
-            duration: Duration(milliseconds: 200),
+            duration: const Duration(milliseconds: 200),
             transform: Matrix4.translationValues(
               _slideOffset + MediaQuery.of(context).size.width,
               0,
               0,
             ),
-            child: UserInfoCard(user: user),
+            child: UserGuardBox(user: user),
+          ),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            transform: Matrix4.translationValues(
+              _slideOffset + MediaQuery.of(context).size.width * 2,
+              0,
+              0,
+            ),
+            child: UserInfoCard(
+              user: user,
+              slideOffset: 0.0,
+            ),
           ),
           Positioned(
             top: 0,
@@ -286,65 +268,40 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Center(
               child: AnimatedOpacity(
                 opacity: _slideOffset == 0 ? 1.0 : 0.0,
-                duration: Duration(milliseconds: 200),
+                duration: const Duration(milliseconds: 100),
                 child: Container(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.grey.withOpacity(0.5),
                   ),
-                  padding: EdgeInsets.all(8.0), // 아이콘과 동그라미 사이의 간격 조절
-                  child: Icon(
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Icon(
                     Icons.arrow_forward_ios,
                     color: Colors.white,
                   ),
                 ),
               ),
             ),
-          )
-
+          ),
         ],
       ),
     );
   }
 
 // 건강데이터 종류
-  List<String> goodFoods = [
-    '당근',
-    '호박',
-    '고구마',
-    '브로콜리',
-    '시금치',
-    '토마토',
-    '파프리카',
-    '양배추',
-    '오이',
-    '가지'
-  ];
-  List<String> badFoods = [
-    '치킨',
-    '햄버거',
-    '피자',
-    '감자튀김',
-    '도넛',
-    '핫도그',
-    '소시지',
-    '베이컨',
-    '초콜릿바',
-    '캔디'
-  ];
+  List<String> goodFoods = ['당근', '호박', '고구마', '브로콜리', '시금치', '토마토', '파프리카', '양배추', '오이', '가지'];
+  List<String> badFoods = ['치킨', '햄버거', '피자', '감자튀김', '도넛', '핫도그', '소시지', '베이컨', '초콜릿바', '캔디'];
 
 // 몸에 좋은 음식 가져오기
   String getRandomGoodFoods(int count) {
     final random = Random();
-    return List.generate(
-        count, (_) => goodFoods[random.nextInt(goodFoods.length)]).join(', ');
+    return List.generate(count, (_) => goodFoods[random.nextInt(goodFoods.length)]).join(', ');
   }
 
 // 몸에 안좋은 음식 가져오기
   String getRandomBadFoods(int count) {
     final random = Random();
-    return List.generate(
-        count, (_) => badFoods[random.nextInt(badFoods.length)]).join(', ');
+    return List.generate(count, (_) => badFoods[random.nextInt(badFoods.length)]).join(', ');
   }
 
   // 건강위치 박스
@@ -453,44 +410,51 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildRecentRecordBox() {
     final userModel = Provider.of<UserModel>(context);
 
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: const Color(0xFFEFEFEF),
-        borderRadius: BorderRadius.circular(10.0),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x29000000),
-            blurRadius: 6.0,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            '나의 최근 기록',
-            style: TextStyle(fontSize: 15),
-          ),
-          const SizedBox(height: 8.0),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildTimestampText(userModel.timestamp),
-              const SizedBox(width: 16.0),
-              Container(
-                height: 30.0,
-                width: 1.0,
-                color: Colors.grey,
+    return GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const UserDataSavePage()),
+          );
+        },
+        child: Container(
+          padding: const EdgeInsets.all(16.0),
+          decoration: BoxDecoration(
+            color: const Color(0xFFEFEFEF),
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x29000000),
+                blurRadius: 6.0,
+                offset: Offset(0, 3),
               ),
-              const SizedBox(width: 16.0),
-              _buildTimeText(userModel.timestamp), // 변경된 부분
             ],
           ),
-        ],
-      ),
-    );
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '나의 최근 기록',
+                style: TextStyle(fontSize: 15),
+              ),
+              const SizedBox(height: 8.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildTimestampText(userModel.timestamp),
+                  const SizedBox(width: 16.0),
+                  Container(
+                    height: 30.0,
+                    width: 1.0,
+                    color: Colors.grey,
+                  ),
+                  const SizedBox(width: 16.0),
+                  _buildTimeText(userModel.timestamp), // 변경된 부분
+                ],
+              ),
+            ],
+          ),
+        ));
   }
 
   // 최근 기록 박스
@@ -512,19 +476,16 @@ class _HomeScreenState extends State<HomeScreen> {
     if (timestamp != null) {
       final dateTime = timestamp.toDate();
       final hourString = dateTime.hour.toString().padLeft(2, '0'); // 시간에 0 추가
-      final minuteString =
-          dateTime.minute.toString().padLeft(2, '0'); // 분에 0 추가
+      final minuteString = dateTime.minute.toString().padLeft(2, '0'); // 분에 0 추가
       return Text(
         '$hourString:$minuteString',
         style: const TextStyle(fontSize: 30.0, color: Color(0xFF276AEE)),
       );
     } else {
-      return const Text('N/A',
-          style: TextStyle(fontSize: 30.0, color: Color(0xFF276AEE)));
+      return const Text('N/A', style: TextStyle(fontSize: 30.0, color: Color(0xFF276AEE)));
     }
   }
 }
-
 
 // 다른 사용자 info 입력칸,
 //만약 fw사용자라면 fq사용자의 name데이터
@@ -533,18 +494,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
 class UserInfoCard extends StatelessWidget {
   final UserModel user;
+  final double slideOffset;
 
-  const UserInfoCard({Key? key, required this.user}) : super(key: key);
+  const UserInfoCard({super.key, required this.user, required this.slideOffset});
 
   Future<String> getOtherUserName(String userId) async {
     String otherUserId = userId == 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2'
         ? 'KWjegweDuEhSVN9I6D8iRnh22kc2'
         : 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2';
 
-    DocumentSnapshot snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(otherUserId)
-        .get();
+    DocumentSnapshot snapshot =
+        await FirebaseFirestore.instance.collection('users').doc(otherUserId).get();
 
     if (snapshot.exists) {
       Map<String, dynamic> data = snapshot.data() as Map<String, dynamic>;
@@ -556,82 +516,271 @@ class UserInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-
-      // 크기 고정 로직
-      width: 500, // 가로 길이 맞춰서 코드 수정해야함.
+    return SizedBox(
+      width: 500,
       height: 200,
-
-      padding: const EdgeInsets.all(27.0),
-      decoration: BoxDecoration(
-        color: const Color(0xFFEFEFEF),
-        borderRadius: BorderRadius.circular(26.0),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x29000000),
-            blurRadius: 6.0,
-            offset: Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Stack(
         children: [
-          FutureBuilder<String>(
-            future: getOtherUserName(user.name),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('에러: ${snapshot.error}');
-              } else {
-                // string이 공백일 경우 연결되지 않음을 출력. 일단,
-                String otherUserName = snapshot.data?.trim() ?? '';
-                if (otherUserName.isEmpty) {
-                  return Text(
-                    '연결되지 않음',
-                    style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
-                  );
-                } else {
-
-
-                  return RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: '${user.guardian} 님과 \n연결되어 있습니다.\n',
-                          style: TextStyle(
-                            fontSize: 24.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
+          Container(
+            width: double.infinity,
+            height: double.infinity,
+            padding: const EdgeInsets.all(27.0),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEFEFEF),
+              borderRadius: BorderRadius.circular(26.0),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x29000000),
+                  blurRadius: 6.0,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                FutureBuilder<String>(
+                  future: getOtherUserName(user.name),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('에러: ${snapshot.error}');
+                    } else {
+                      String otherUserName = snapshot.data?.trim() ?? '';
+                      if (false) {
+                        return const Text(
+                          '연결되지 않음',
+                          style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold),
+                        );
+                      } else {
+                        return RichText(
+                          textAlign: TextAlign.center,
+                          text: const TextSpan(
+                            children: [
+                              TextSpan(
+                                text: '연동된 파트너의 계정이 없습니다',
+                                style: TextStyle(
+                                  fontSize: 22.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              // TextSpan(
+                              //   text: '\n사용자 추가하기.',
+                              //   style: TextStyle(
+                              //     fontSize: 20.0,
+                              //     color: Colors.blue,
+                              //     decoration: TextDecoration.underline,
+                              //   ),
+                              //   recognizer: TapGestureRecognizer()
+                              //     ..onTap = () {
+                              //       context.push(AppScreen.userDetail);
+                              //       print('자세히 보기 클릭');
+                              //     },
+                              // ),
+                            ],
                           ),
-                        ),
-                        TextSpan(
-                          text: '자세히 보시려면 눌러주세요.',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            color: Colors.blue,
-                            decoration: TextDecoration.underline,
-                          ),
-
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                            // user detail로 이동하는 로직.
-                              context.push(AppScreen.userDetail);
-                              print('자세히 보기 클릭');
-                            },
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              }
-            },
+                        );
+                      }
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 0,
+            bottom: 0,
+            left: 10,
+            child: Center(
+              child: AnimatedOpacity(
+                opacity: slideOffset == 0 ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 200),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey.withOpacity(0.5),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 }
+
+class UserGuardBox extends StatelessWidget {
+  final UserModel user;
+
+  const UserGuardBox({super.key, required this.user});
+
+  @override
+  Widget build(BuildContext context) {
+    return ConstrainedBox(
+      constraints: const BoxConstraints(
+        minWidth: double.infinity,
+        minHeight: 200,
+      ),
+      child: Stack(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(27.0),
+            decoration: BoxDecoration(
+              color: const Color(0xFFEFEFEF),
+              borderRadius: BorderRadius.circular(26.0),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x29000000),
+                  blurRadius: 6.0,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: IntrinsicHeight(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.person,
+                        color: Color(0xFF276AEE),
+                        size: 56.49,
+                      ),
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: '파트너의 정보\n',
+                              style: TextStyle(
+                                fontSize: 15.0, // 혈압 텍스트 크기
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            TextSpan(
+                              text: user.guardian,
+                              style: const TextStyle(
+                                fontSize: 20.0, // 이완 수축 텍스트 크기
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 0),
+                  const VerticalDivider(
+                    color: Colors.grey,
+                    thickness: 1.0,
+                    width: 32.0,
+                  ),
+                  const SizedBox(width: 15),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              '혈압',
+                              style: TextStyle(fontSize: 20.0),
+                            ),
+                            const Text(
+                              '이완/ 수축',
+                              style: TextStyle(fontSize: 14.0),
+                            ),
+                            Text(
+                              '${user.diastolic}/ ${user.systolic}',
+                              style: const TextStyle(
+                                fontSize: 28.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 16.0), // 큰 줄 간격
+                            const Text(
+                              '혈당',
+                              style: TextStyle(fontSize: 20.0),
+                            ),
+                            Text(
+                              '${user.bloodSugar}',
+                              style: const TextStyle(
+                                fontSize: 28.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          Positioned(
+            top: 0,
+            bottom: 0,
+            right: 10,
+            child: Center(
+              child: AnimatedOpacity(
+                opacity: _slideOffset == 0 ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 100),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey.withOpacity(0.5),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Icon(
+                    Icons.arrow_forward_ios,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 0,
+            bottom: 0,
+            left: 10,
+            child: Center(
+              child: AnimatedOpacity(
+                opacity: _slideOffset == 0 ? 1.0 : 0.0,
+                duration: const Duration(milliseconds: 100),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.grey.withOpacity(0.5),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: const Icon(
+                    Icons.arrow_back_ios,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+double _slideOffset = 0.0;

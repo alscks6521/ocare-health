@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/services.dart';
@@ -22,15 +23,15 @@ class _CalendarPageState extends State<CalendarPage> {
   void initState() {
     super.initState();
     // 화면을 세로 모드로 고정
-    // SystemChrome.setPreferredOrientations([
-    //   DeviceOrientation.portraitUp,
-    //   DeviceOrientation.portraitDown,
-    // ]);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     _loadDataFromFirebase();
 
     //firebase 저장로직 초기화
-
   }
+
   Future<void> _loadDataFromFirebase() async {
     try {
       await Provider.of<HealthDataProvider>(context, listen: false).loadDataFromFirebase();
@@ -82,74 +83,128 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget _customTableCalendar(BuildContext context) {
     return Consumer<HealthDataProvider>(
       builder: (context, healthDataProvider, _) {
-        return TableCalendar(
-          locale: "ko_KR",
-          focusedDay: _focusedDay ?? DateTime.now(),
-          firstDay: DateTime.utc(2010, 10, 16),
-          lastDay: DateTime.utc(2030, 3, 14),
-          rowHeight: 60.0,
-          headerStyle: const HeaderStyle(
-            formatButtonVisible: false,
-            titleCentered: true,
-            titleTextStyle: TextStyle(
-              color: Color(0xFF276AEE),
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+        return RepaintBoundary(
+          child: TableCalendar(
+            locale: "ko_KR",
+            focusedDay: _focusedDay ?? DateTime.now(),
+            firstDay: DateTime.utc(2010, 10, 16),
+            lastDay: DateTime.utc(2030, 3, 14),
+            rowHeight: 60.0,
+            headerStyle: const HeaderStyle(
+              formatButtonVisible: false,
+              titleCentered: true,
+              titleTextStyle: TextStyle(
+                color: Color(0xFF276AEE),
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+              headerPadding: EdgeInsets.symmetric(vertical: 3),
             ),
-            headerPadding: EdgeInsets.symmetric(vertical: 3),
-          ),
-          daysOfWeekStyle: const DaysOfWeekStyle(
-            weekendStyle: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-            weekdayStyle: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          daysOfWeekHeight: 30.0,
-          calendarStyle: CalendarStyle(
-            cellAlignment: Alignment.topCenter,
-            weekendTextStyle: const TextStyle(color: Colors.red),
-            cellMargin: EdgeInsets.zero,
-            defaultDecoration: const BoxDecoration(shape: BoxShape.rectangle),
-            weekendDecoration: const BoxDecoration(shape: BoxShape.rectangle),
-            selectedDecoration: const BoxDecoration(
-              color: Color(0xFF276AEE),
-              shape: BoxShape.rectangle,
+            daysOfWeekStyle: const DaysOfWeekStyle(
+              weekendStyle: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+              weekdayStyle: TextStyle(fontWeight: FontWeight.bold),
             ),
-            todayDecoration: BoxDecoration(
-              color: Colors.green.withOpacity(0.6),
-              shape: BoxShape.rectangle,
+            daysOfWeekHeight: 30.0,
+            calendarStyle: CalendarStyle(
+              cellAlignment: Alignment.topCenter,
+              weekendTextStyle: const TextStyle(color: Colors.red),
+              cellMargin: EdgeInsets.zero,
+              defaultDecoration: const BoxDecoration(shape: BoxShape.rectangle),
+              weekendDecoration: const BoxDecoration(shape: BoxShape.rectangle),
+              selectedDecoration: BoxDecoration(
+                color: const Color(0xFF276AEE),
+                borderRadius: BorderRadius.circular(8),
+                shape: BoxShape.rectangle,
+              ),
+              todayDecoration: BoxDecoration(
+                color: const Color(0xFF959D33),
+                borderRadius: BorderRadius.circular(8),
+                shape: BoxShape.rectangle,
+              ),
             ),
-          ),
-          eventLoader: (day) => healthDataProvider.getDataForDay(day),
-          selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-          onDaySelected: (selectedDay, focusedDay) {
-            if (!isSameDay(_selectedDay, selectedDay) || !isSameDay(_focusedDay, focusedDay)) {
-              setState(() {
-                _selectedDay = selectedDay;
-                _focusedDay = focusedDay;
-              });
-            }
-          },
-          calendarFormat: CalendarFormat.month,
-          onPageChanged: (focusedDay) {
-            if (!isSameDay(_focusedDay, focusedDay)) {
-              setState(() {
-                _focusedDay = focusedDay;
-              });
-            }
-          },
-          calendarBuilders: CalendarBuilders(
-            markerBuilder: (context, day, events) {
-              if (events.isNotEmpty) {
-                return Positioned(
-                  right: 1,
-                  bottom: 1,
-                  child: buildEventMarker(events.length),
-                );
+            eventLoader: (day) => healthDataProvider.getDataForDay(day),
+            selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+            onDaySelected: (selectedDay, focusedDay) {
+              if (!isSameDay(_selectedDay, selectedDay) || !isSameDay(_focusedDay, focusedDay)) {
+                setState(() {
+                  _selectedDay = selectedDay;
+                  _focusedDay = focusedDay;
+                });
               }
-              return null;
             },
+            calendarFormat: CalendarFormat.month,
+            onPageChanged: (focusedDay) {
+              if (!isSameDay(_focusedDay, focusedDay)) {
+                setState(() {
+                  _focusedDay = focusedDay;
+                });
+              }
+            },
+            calendarBuilders: CalendarBuilders(
+              markerBuilder: (context, day, events) {
+                if (events.isNotEmpty) {
+                  return Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: buildEventMarker(events.length),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+                return null;
+              },
+              defaultBuilder: (context, day, focusedDay) {
+                return _buildCell(day, focusedDay, isSelected: false);
+              },
+              todayBuilder: (context, day, focusedDay) {
+                return _buildCell(day, focusedDay, isToday: true);
+              },
+              outsideBuilder: (context, day, focusedDay) {
+                return _buildCell(day, focusedDay, isOutside: true);
+              },
+              selectedBuilder: (context, day, focusedDay) {
+                return _buildCell(day, focusedDay, isSelected: true);
+              },
+            ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildCell(DateTime day, DateTime focusedDay,
+      {bool isSelected = false, bool isToday = false, bool isOutside = false}) {
+    final isWeekend = day.weekday == DateTime.saturday || day.weekday == DateTime.sunday;
+    final textStyle = TextStyle(
+      fontSize: 16,
+      color: isSelected
+          ? Colors.white
+          : isToday
+              ? Colors.blue
+              : isOutside
+                  ? Colors.grey
+                  : isWeekend
+                      ? Colors.red
+                      : Colors.black,
+    );
+
+    return Container(
+      decoration: isSelected
+          ? BoxDecoration(
+              color: const Color(0xFF276AEE),
+              borderRadius: BorderRadius.circular(8),
+              shape: BoxShape.rectangle,
+            )
+          : null,
+      margin: isSelected ? const EdgeInsets.all(6.0) : null,
+      alignment: Alignment.center,
+      child: Text(
+        '${day.day}',
+        style: textStyle,
+      ),
     );
   }
 

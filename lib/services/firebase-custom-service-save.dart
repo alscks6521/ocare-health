@@ -65,4 +65,35 @@ class FirestoreServiceCustom {
       return;
     }
   }
+
+
+
+  /// 이 커스텀 데이터는 혈당, 이완기, 수축기, 체중 데이터만 저장됩니다.
+///
+///
+  Future<void> saveCustomUserData({
+    required int bloodSugar,
+    required int diastolic,
+    required int systolic,
+    required int weight,
+  }) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userId = user.uid;
+      final timestamp = Timestamp.now();
+
+      await FirebaseFirestore.instance.collection('users').doc(userId).set({
+        'bloodSugar': bloodSugar,
+        'diastolic': diastolic,
+        'systolic': systolic,
+        'weight': weight,
+        'timestamp': timestamp,
+      }, SetOptions(merge: true));
+    } else {
+      // 로그인하지 않은 경우 처리 로직 추가
+      return;
+    }
+  }
+
+
 }

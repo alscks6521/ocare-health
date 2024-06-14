@@ -61,23 +61,6 @@ class _NotificationListPageState extends State<NotificationListPage> {
           // Column 대신 ListView 사용
           padding: const EdgeInsets.all(25.0),
           children: [
-            // Row(
-            //   children: [
-            //     IconButton(
-            //       icon: Icon(Icons.arrow_back),
-            //       onPressed: () {
-            //         Navigator.of(context).pop();
-            //       },
-            //     ),
-            //     SizedBox(width: 10),
-            //     Text(
-            //       title,
-            //       style: TextStyle(
-            //         fontSize: size,
-            //       ),
-            //     ),
-            //   ],
-            // ),
             Row(
               children: [
                 IconButton(
@@ -86,7 +69,7 @@ class _NotificationListPageState extends State<NotificationListPage> {
                     Navigator.of(context).pop();
                   },
                 ),
-                Text(
+                const Text(
                   '알림 목록',
                   style: TextStyle(
                     fontSize: 35,
@@ -100,7 +83,6 @@ class _NotificationListPageState extends State<NotificationListPage> {
                 ),
               ],
             ),
-
             ListView.builder(
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),

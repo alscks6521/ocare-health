@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:ocare/constants/constants.dart';
 import 'package:ocare/screens/home_screen.dart';
-import 'package:ocare/utils/font_styles.dart';
 import 'package:provider/provider.dart';
 import 'package:ocare/models/user_model.dart';
 import '../components/colors.dart';
@@ -138,13 +137,11 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                initLoginService(context);
-              },
-              child: const Text(
-                '카카오 연동하기',
-                style: TextStyle(fontSize: 15),
+            InkWell(
+              onTap: () => initLoginService(context),
+              child: Image.asset(
+                width: 300,
+                'assets/kakao_login_btn/kakao_login_large_wide.png',
               ),
             ),
             const SizedBox(

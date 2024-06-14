@@ -27,9 +27,12 @@ class UserBox extends StatelessWidget {
   final TextEditingController diastolicController;
   final TextEditingController bloodSugarController;
 
-  final systolicValues = List.generate(200, (index) => (index + 100).toString());
-  final diastolicValues = List.generate(150, (index) => (index + 40).toString());
-  final bloodSugarValues = List.generate(400, (index) => (index + 60).toString());
+  final systolicValues =
+  List.generate(200, (index) => (index + 100).toString());
+  final diastolicValues =
+  List.generate(150, (index) => (index + 40).toString());
+  final bloodSugarValues =
+  List.generate(400, (index) => (index + 60).toString());
 
   @override
   Widget build(BuildContext context) {
@@ -198,6 +201,9 @@ class UserBox extends StatelessWidget {
               const SizedBox(
                 height: 26,
               ),
+
+
+              /// 저장 로직입니다.
               Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
