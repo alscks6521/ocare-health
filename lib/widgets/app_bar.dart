@@ -10,7 +10,7 @@ class AppbarWidget extends StatelessWidget {
   const AppbarWidget({
     super.key,
     required this.title,
-    this.size = 50.0,
+    this.size = 40.0,
   });
 
   @override

@@ -278,7 +278,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Text(
             '앱 설정',
             style: TextStyle(
-              fontSize: 50.0,
+              fontSize: 30.0,
             ),
           ),
         ],
@@ -418,7 +418,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Text(
             '초대',
             style: TextStyle(
-              fontSize: 50.0,
+              fontSize: 30.0,
             ),
           ),
         ],

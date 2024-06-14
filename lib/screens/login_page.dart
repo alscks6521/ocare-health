@@ -137,13 +137,11 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: () {
-                initLoginService(context);
-              },
-              child: const Text(
-                '카카오 연동하기',
-                style: TextStyle(fontSize: 15),
+            InkWell(
+              onTap: () => initLoginService(context),
+              child: Image.asset(
+                width: 300,
+                'assets/kakao_login_btn/kakao_login_large_wide.png',
               ),
             ),
             const SizedBox(

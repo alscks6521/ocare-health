@@ -7,6 +7,7 @@ import 'package:ocare/models/user_model.dart';
 import 'package:ocare/provider/chat_state_provider.dart';
 import 'package:ocare/provider/theme_provider.dart';
 import 'package:ocare/router/app_router.dart';
+import 'package:ocare/provider/theme_provider.dart';
 import 'package:ocare/screens/login_page.dart';
 import 'package:ocare/services/notification_service.dart';
 import 'package:provider/provider.dart';
@@ -62,6 +63,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // themeProvider 오브젝트
+    final themeProvider = Provider.of<ThemeProvider>(context);
+
     return ChangeNotifierProvider(
       create: (context) => UserModel(
         name: '',
@@ -78,6 +82,8 @@ class MyApp extends StatelessWidget {
       child: MaterialApp.router(
         routerConfig: router,
         debugShowCheckedModeBanner: false,
+        theme: themeProvider.lightTheme, // themeProvider
+        darkTheme: themeProvider.darkTheme, // ``
         builder: (context, child) {
           return StreamBuilder<firebase_auth.User?>(
             stream: FirebaseAuth.instance.authStateChanges(),
@@ -92,10 +98,6 @@ class MyApp extends StatelessWidget {
             },
           );
         },
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueAccent),
-          useMaterial3: true,
-        ),
       ),
     );
   }
