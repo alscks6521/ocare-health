@@ -2,12 +2,14 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
+import 'package:ocare/screens/page/calendarAndChart.dart';
 import 'package:ocare/screens/page/user_data_save_page.dart';
 import 'package:ocare/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/guardian_user_model.dart';
 import '../models/user_model.dart';
+import '../router/app_router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -419,7 +421,21 @@ class _HomeScreenState extends State<HomeScreen> {
       gaugeColor = const Color(0xFF276AEE); // 정상일 경우 파란색
     }
 
-    return Container(
+    return InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CalendarAndChartPage(), // CalendarAndChartPage 위젯으로 변경
+            ),
+          );
+        },
+
+
+    child:  Container(
+
+
+
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: const Color(0xFFEFEFEF),
@@ -481,6 +497,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+    )
+
+
     );
   }
 
