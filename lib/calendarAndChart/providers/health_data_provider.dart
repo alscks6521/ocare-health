@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
-import '../../models/user_model.dart';
 import '../models/HealthData.dart';
 
 class HealthDataProvider with ChangeNotifier {
@@ -53,6 +51,12 @@ class HealthDataProvider with ChangeNotifier {
 
       // Update the health data in the provider
       // ...
+      _healthDataMap.clear();
+      for (final data in healthDataList) {
+        addHealthData(data);
+      }
+      notifyListeners();
+
     } catch (e) {
       print('Error loading data from Firebase: $e');
     }
