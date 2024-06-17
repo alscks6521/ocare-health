@@ -25,7 +25,10 @@ final router = GoRouter(
         return Scaffold(
           backgroundColor: Colors.transparent,
           extendBody: true, // 바텀 네비게이션 바 뒤로 body를 추가
-          body: child,
+          body: Padding(
+            padding: EdgeInsets.zero,
+            child: child,
+          ),
 
           bottomNavigationBar: BottomNavBar(
             currentIndex: _calculateSelectedIndex(state.uri.toString()),
@@ -37,7 +40,7 @@ final router = GoRouter(
           path: AppScreen.business,
           pageBuilder: (context, state) => NoTransitionPage(
             key: state.pageKey,
-            child: const BusinessScreen(),
+            child: BusinessScreen(),
           ),
         ),
         GoRoute(
@@ -147,6 +150,5 @@ class AppScreen {
 }
 
 int _calculateSelectedIndex(String location) {
-  return [AppScreen.business, AppScreen.home, AppScreen.profile]
-      .indexOf(location);
+  return [AppScreen.business, AppScreen.home, AppScreen.profile].indexOf(location);
 }

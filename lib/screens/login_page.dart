@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:ocare/constants/constants.dart';
 import 'package:ocare/screens/home_screen.dart';
-import 'package:ocare/utils/font_styles.dart';
 import 'package:provider/provider.dart';
 import 'package:ocare/models/user_model.dart';
 import '../components/colors.dart';

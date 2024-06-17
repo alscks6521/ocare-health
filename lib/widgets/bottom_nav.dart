@@ -24,22 +24,20 @@ class CustomBottomNavigationBar extends StatelessWidget {
   }
 
   Widget _buildIcon(int index, dynamic icon) {
-    return Expanded(
-      child: InkWell(
-        onTap: () => onTap(index),
-        child: index == 0
-            ? SvgPicture.asset(
-          icon,
-          width: 30,
-          height: 30,
-          color: index == currentIndex ? Colors.white : Colors.white70,
-        )
-            : Icon(
-          icon,
-          size: 30,
-          color: index == currentIndex ? Colors.white : Colors.white70,
-        ),
-      ),
+    return InkWell(
+      onTap: () => onTap(index),
+      child: index == 0
+          ? SvgPicture.asset(
+              icon,
+              width: 30,
+              height: 30,
+              color: index == currentIndex ? Colors.white : Colors.white70,
+            )
+          : Icon(
+              icon,
+              size: 30,
+              color: index == currentIndex ? Colors.white : Colors.white70,
+            ),
     );
   }
 }

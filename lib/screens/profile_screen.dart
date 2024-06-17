@@ -73,8 +73,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       // 닉네임, 이메일 가져오기 실패
       // -> 이름 수정하려면 nickname을 수정해야하는데,
-      final _nicknameController = TextEditingController();
-      final _emailController = TextEditingController();
+      final nicknameController = TextEditingController();
+      final emailController = TextEditingController();
 
       // add code -> 야매로 함. 실질적으로는 uid가져와서 입력
       // pw- a6521
@@ -82,8 +82,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
 //TODO add code
 // -> kt user일 경우, data가 안가져와짐. -> 수정 kt, kw 둘다 가져와지게.
-      if (userId == 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2' ||
-          userId == 'KWjegweDuEhSVN9I6D8iRnh22kc2') {
+      if (userId == 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2' || userId == 'KWjegweDuEhSVN9I6D8iRnh22kc2') {
         String targetUserId = userId == 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2'
             ? 'KWjegweDuEhSVN9I6D8iRnh22kc2'
             : 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2';
@@ -100,8 +99,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
           int.tryParse(_diastolicController.text) ?? 0,
           int.tryParse(_bloodSugarController.text) ?? 0,
           timestamp,
-          _nicknameController.text,
-          _emailController.text,
+          nicknameController.text,
+          emailController.text,
         );
       }
 
@@ -117,8 +116,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
         int.tryParse(_diastolicController.text) ?? 0,
         int.tryParse(_bloodSugarController.text) ?? 0,
         timestamp,
-        _nicknameController.text,
-        _emailController.text,
+        nicknameController.text,
+        emailController.text,
       );
     } else {
       // 로그인하지 않은 경우 처리 로직 추가
@@ -132,79 +131,78 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserModel>(context);
 
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: ListView(
-          // Column 대신 ListView 사용
-          padding: const EdgeInsets.all(25.0),
+    return SafeArea(
+      child: ListView(
+        // Column 대신 ListView 사용
+        padding: const EdgeInsets.all(25.0),
 
-          children: [
-            const AppbarWidget(title: '내 정보'),
-            const SizedBox(height: 20.0),
+        children: [
+          const AppbarWidget(title: '내 정보'),
+          const SizedBox(height: 20.0),
 
-            // Text(
-            //   '${user.name} 님 안녕하세요 \n오늘하루도 건강한 하루 되세요',
-            //   style: TextStyle(
-            //     fontSize: 18.0,
-            //     fontWeight: FontWeight.bold,
-            //   ),
-            // ),
-            SizedBox(
-              height: 16,
-            ),
+          // Text(
+          //   '${user.name} 님 안녕하세요 \n오늘하루도 건강한 하루 되세요',
+          //   style: TextStyle(
+          //     fontSize: 18.0,
+          //     fontWeight: FontWeight.bold,
+          //   ),
+          // ),
+          const SizedBox(
+            height: 16,
+          ),
 
-            UserBox(
-              nameController: _nameController,
-              idController: _idController,
-              ageController: _ageController,
-              weightController: _weightController,
-              guardianController: _guardianController,
-              systolicController: _systolicController,
-              diastolicController: _diastolicController,
-              bloodSugarController: _bloodSugarController,
-              /// save로직 포함.
-            ),
+          UserBox(
+            nameController: _nameController,
+            idController: _idController,
+            ageController: _ageController,
+            weightController: _weightController,
+            guardianController: _guardianController,
+            systolicController: _systolicController,
+            diastolicController: _diastolicController,
+            bloodSugarController: _bloodSugarController,
 
-            const SizedBox(height: 16.0),
-            _buildButtonSection(context),
-            const SizedBox(
-              height: 32,
-            ),
-            _buildSettingsText(),
-            const SizedBox(
-              height: 24,
-            ),
-            _buildPushNotificationSetting(),
-            const SizedBox(
-              height: 24,
-            ),
-            _buildPrivacyAndMarketingSettings(),
-            const SizedBox(
-              height: 24,
-            ),
-            _inviteSetting(),
-            const SizedBox(
-              height: 24,
-            ),
-            _invite(),
-            const SizedBox(height: 80.0), // 바텀 패딩 추가
-          ],
-        ),
+            /// save로직 포함.
+          ),
+
+          const SizedBox(height: 16.0),
+          _buildButtonSection(context),
+          const SizedBox(
+            height: 32,
+          ),
+          _buildSettingsText(),
+          const SizedBox(
+            height: 24,
+          ),
+          _buildPushNotificationSetting(),
+          const SizedBox(
+            height: 24,
+          ),
+          _buildPrivacyAndMarketingSettings(),
+          const SizedBox(
+            height: 24,
+          ),
+          _inviteSetting(),
+          const SizedBox(
+            height: 24,
+          ),
+          _invite(),
+          const SizedBox(height: 80.0), // 바텀 패딩 추가
+        ],
       ),
-      floatingActionButton: Container(
-        width: 80.0, // 너비
-        height: 80.0, // 높이
 
-        margin: EdgeInsets.only(bottom: 175), // 원하는 만큼 위로 올리기
-        // child: FloatingActionButton(
-        //   onPressed: _saveToFirestore,
-        //   child: const Icon(
-        //     Icons.save,
-        //     size: 40,
-        //   ), // 아이콘 크기도 조절
-        // ),
-      ),
+      // floatingActionButton: Container(
+      //   width: 80.0, // 너비
+      //   height: 80.0, // 높이
+
+      //   margin: const EdgeInsets.only(bottom: 175), // 원하는 만큼 위로 올리기
+      //   // child: FloatingActionButton(
+      //   //   onPressed: _saveToFirestore,
+      //   //   child: const Icon(
+      //   //     Icons.save,
+      //   //     size: 40,
+      //   //   ), // 아이콘 크기도 조절
+      //   // ),
+      // ),
     );
   }
 
@@ -229,8 +227,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onPressed: () {
               context.push(AppScreen.calendarPage);
               // context.push(AppScreen.calendarAndChart);
-
             },
+            style: ElevatedButton.styleFrom(
+              minimumSize: const Size(140, 50),
+              backgroundColor: Colors.blue,
+              // 버튼의 가로 및 세로 크기 설정
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15), // 버튼의 모서리 반경 설정
+              ), // 버튼의 배경색 설정
+            ),
             child: const Text(
               '캘린더',
               style: TextStyle(
@@ -238,6 +243,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 fontSize: 24.0, // 텍스트 크기를 24로 설정
               ),
             ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              context.push(AppScreen.chartPage);
+            },
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(140, 50),
               backgroundColor: Colors.blue,
@@ -246,25 +256,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 borderRadius: BorderRadius.circular(15), // 버튼의 모서리 반경 설정
               ), // 버튼의 배경색 설정
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              context.push(AppScreen.chartPage);
-            },
             child: const Text(
               '통계',
               style: TextStyle(
                 color: Colors.white, // 텍스트 색상을 흰색으로 설정
                 fontSize: 24.0, // 텍스트 크기를 24로 설정
               ),
-            ),
-            style: ElevatedButton.styleFrom(
-              minimumSize: const Size(140, 50),
-              backgroundColor: Colors.blue,
-              // 버튼의 가로 및 세로 크기 설정
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(15), // 버튼의 모서리 반경 설정
-              ), // 버튼의 배경색 설정
             ),
           ),
         ],
@@ -456,13 +453,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onPressed: () {
               context.push(AppScreen.mainPage);
             },
-            child: const Text(
-              '오케어 초대하기',
-              style: TextStyle(
-                color: Colors.white, // 텍스트 색상을 흰색으로 설정
-                fontSize: 20.0, // 텍스트 크기를 24로 설정
-              ),
-            ),
             style: ElevatedButton.styleFrom(
               minimumSize: const Size(160, 50),
               backgroundColor: Colors.blue,
@@ -470,6 +460,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15), // 버튼의 모서리 반경 설정
               ), // 버튼의 배경색 설정
+            ),
+            child: const Text(
+              '오케어 초대하기',
+              style: TextStyle(
+                color: Colors.white, // 텍스트 색상을 흰색으로 설정
+                fontSize: 20.0, // 텍스트 크기를 24로 설정
+              ),
             ),
           ),
 
