@@ -1,10 +1,13 @@
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
+import 'package:ocare/screens/page/calendarAndChart.dart';
 import 'package:ocare/screens/page/user_data_save_page.dart';
 import 'package:ocare/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/guardian_user_model.dart';
 import '../models/user_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,13 +18,62 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  GuardianUserModel guardianUser;
+
+  _HomeScreenState()
+      : guardianUser = GuardianUserModel(
+          name: '',
+          id: '',
+          age: 0,
+          weight: 0,
+          guardian: '',
+          systolic: 0,
+          diastolic: 0,
+          bloodSugar: 0,
+          nickname: '',
+          email: '',
+        );
+
   @override
   void initState() {
     super.initState();
+
     _initUserModel();
+    _initGuardianUserModel(); // 가디언 초기화 함수
+
     // 종료되고 실행되었을때 랜덤 배열 로직
     _goodFoods = getRandomGoodFoods(3);
     _badFoods = getRandomBadFoods(2);
+  }
+
+  Future<void> _initGuardianUserModel() async {
+    final currentUserUID = FirebaseAuth.instance.currentUser?.uid;
+    final guardianUID = currentUserUID == 'KWjegweDuEhSVN9I6D8iRnh22kc2'
+        ? 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2'
+        : 'KWjegweDuEhSVN9I6D8iRnh22kc2';
+
+    final snapshot = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(guardianUID)
+        .get();
+
+    if (snapshot.exists) {
+      final data = snapshot.data();
+      guardianUser = GuardianUserModel(
+        name: data?['name'] ?? '',
+        id: data?['id'] ?? '',
+        age: data?['age'] ?? 0,
+        weight: data?['weight'] ?? 0,
+        guardian: data?['guardian'] ?? '',
+        systolic: data?['systolic'] ?? 0,
+        diastolic: data?['diastolic'] ?? 0,
+        bloodSugar: data?['bloodSugar'] ?? 0,
+        nickname: data?['nickname'] ?? '',
+        email: data?['email'] ?? '',
+        friends: List<String>.from(data?['friends'] ?? []),
+        timestamp: data?['timestamp'],
+      );
+    }
   }
 
   // user box ui animation offset init
@@ -247,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
               0,
               0,
             ),
-            child: UserGuardBox(user: user),
+            child: UserGuardBox(user: user, guardianUser: guardianUser),
           ),
           AnimatedContainer(
             duration: const Duration(milliseconds: 200),
@@ -337,7 +389,21 @@ class _HomeScreenState extends State<HomeScreen> {
       gaugeColor = const Color(0xFF276AEE); // 정상일 경우 파란색
     }
 
-    return Container(
+    return InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CalendarAndChartPage(), // CalendarAndChartPage 위젯으로 변경
+            ),
+          );
+        },
+
+
+    child:  Container(
+
+
+
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: const Color(0xFFEFEFEF),
@@ -399,6 +465,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+    )
+
+
     );
   }
 
@@ -620,11 +689,18 @@ class UserInfoCard extends StatelessWidget {
 
 class UserGuardBox extends StatelessWidget {
   final UserModel user;
+  final GuardianUserModel guardianUser;
 
-  const UserGuardBox({super.key, required this.user});
+  const UserGuardBox({Key? key, required this.user, required this.guardianUser})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final currentUserUID = FirebaseAuth.instance.currentUser?.uid;
+    final guardianUID = currentUserUID == 'KWjegweDuEhSVN9I6D8iRnh22kc2'
+        ? 'ktgMbo0sT6gyhgTNv8c96UZ3FVm2'
+        : 'KWjegweDuEhSVN9I6D8iRnh22kc2';
+
     return ConstrainedBox(
       constraints: const BoxConstraints(
         minWidth: double.infinity,
@@ -671,8 +747,8 @@ class UserGuardBox extends StatelessWidget {
                               ),
                             ),
                             TextSpan(
-                              text: user.guardian,
-                              style: const TextStyle(
+                              text: '${guardianUser.name}',
+                              style: TextStyle(
                                 fontSize: 20.0, // 이완 수축 텍스트 크기
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -706,8 +782,9 @@ class UserGuardBox extends StatelessWidget {
                               style: TextStyle(fontSize: 14.0),
                             ),
                             Text(
-                              '${user.diastolic}/ ${user.systolic}',
-                              style: const TextStyle(
+
+                              '${guardianUser.diastolic}/ ${guardianUser.systolic}',
+                              style: TextStyle(
                                 fontSize: 28.0,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -718,8 +795,8 @@ class UserGuardBox extends StatelessWidget {
                               style: TextStyle(fontSize: 20.0),
                             ),
                             Text(
-                              '${user.bloodSugar}',
-                              style: const TextStyle(
+                              '${guardianUser.bloodSugar}',
+                              style: TextStyle(
                                 fontSize: 28.0,
                                 fontWeight: FontWeight.bold,
                               ),
