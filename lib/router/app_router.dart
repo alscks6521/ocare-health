@@ -118,9 +118,9 @@ final router = GoRouter(
     ),
     GoRoute(
       path: AppScreen.calendarAndChart,
-      pageBuilder: (context, state) => NoTransitionPage(
+      pageBuilder: (context, state) => MaterialPage(
         key: state.pageKey,
-        child: const calendarAndChart(),
+        child: const UserDataSavePage(),
       ),
     ),
   ],
