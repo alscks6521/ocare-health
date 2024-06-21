@@ -125,7 +125,7 @@ class BusinessScreen extends StatelessWidget {
               Stack(children: [
                 ConstrainedBox(
                   constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.49,
+                    maxHeight: MediaQuery.of(context).size.height * 0.46,
                   ),
                   child: Column(
                     children: [

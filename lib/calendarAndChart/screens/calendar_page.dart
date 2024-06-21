@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/services.dart';
@@ -22,6 +23,8 @@ class _CalendarPageState extends State<CalendarPage> {
   void initState() {
     super.initState();
     _loadDataFromFirebase(); // 변경: Firebase에서 데이터를 로드하는 메서드 호출 추가
+
+    
   }
 
   Future<void> _loadDataFromFirebase() async {
@@ -68,6 +71,7 @@ class _CalendarPageState extends State<CalendarPage> {
   Widget _customTableCalendar(BuildContext context) {
     return Consumer<HealthDataProvider>(
       builder: (context, healthDataProvider, _) {
+
         return TableCalendar(
           locale: "ko_KR", // 한국어 로케일 설정
           focusedDay: _focusedDay ?? DateTime.now(), // 포커스된 날짜 설정
@@ -98,11 +102,28 @@ class _CalendarPageState extends State<CalendarPage> {
             selectedDecoration: const BoxDecoration(
               color: Color(0xFF276AEE),
               shape: BoxShape.rectangle,
+
+              
             ),
-            todayDecoration: BoxDecoration(
-              color: Colors.green.withOpacity(0.6),
-              shape: BoxShape.rectangle,
+            daysOfWeekHeight: 30.0,
+            calendarStyle: CalendarStyle(
+              cellAlignment: Alignment.topCenter,
+              weekendTextStyle: const TextStyle(color: Colors.red),
+              cellMargin: EdgeInsets.zero,
+              defaultDecoration: const BoxDecoration(shape: BoxShape.rectangle),
+              weekendDecoration: const BoxDecoration(shape: BoxShape.rectangle),
+              selectedDecoration: BoxDecoration(
+                color: const Color(0xFF276AEE),
+                borderRadius: BorderRadius.circular(8),
+                shape: BoxShape.rectangle,
+              ),
+              todayDecoration: BoxDecoration(
+                color: const Color(0xFF959D33),
+                borderRadius: BorderRadius.circular(8),
+                shape: BoxShape.rectangle,
+              ),
             ),
+
           ),
           eventLoader: (day) => healthDataProvider.getDataForDay(day), // 각 날짜에 대한 이벤트 데이터 로드
           selectedDayPredicate: (day) => isSameDay(_selectedDay, day), // 선택된 날짜 판별 함수
@@ -130,12 +151,74 @@ class _CalendarPageState extends State<CalendarPage> {
                   bottom: 1,
                   child: buildEventMarker(events.length), // 이벤트 마커 생성
                 );
+
               }
-              return null;
             },
+            calendarBuilders: CalendarBuilders(
+              markerBuilder: (context, day, events) {
+                if (events.isNotEmpty) {
+                  return Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: buildEventMarker(events.length),
+                        ),
+                      ),
+                    ],
+                  );
+                }
+                return null;
+              },
+              defaultBuilder: (context, day, focusedDay) {
+                return _buildCell(day, focusedDay, isSelected: false);
+              },
+              todayBuilder: (context, day, focusedDay) {
+                return _buildCell(day, focusedDay, isToday: true);
+              },
+              outsideBuilder: (context, day, focusedDay) {
+                return _buildCell(day, focusedDay, isOutside: true);
+              },
+              selectedBuilder: (context, day, focusedDay) {
+                return _buildCell(day, focusedDay, isSelected: true);
+              },
+            ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildCell(DateTime day, DateTime focusedDay,
+      {bool isSelected = false, bool isToday = false, bool isOutside = false}) {
+    final isWeekend = day.weekday == DateTime.saturday || day.weekday == DateTime.sunday;
+    final textStyle = TextStyle(
+      fontSize: 16,
+      color: isSelected
+          ? Colors.white
+          : isToday
+              ? Colors.blue
+              : isOutside
+                  ? Colors.grey
+                  : isWeekend
+                      ? Colors.red
+                      : Colors.black,
+    );
+
+    return Container(
+      decoration: isSelected
+          ? BoxDecoration(
+              color: const Color(0xFF276AEE),
+              borderRadius: BorderRadius.circular(8),
+              shape: BoxShape.rectangle,
+            )
+          : null,
+      margin: isSelected ? const EdgeInsets.all(6.0) : null,
+      alignment: Alignment.center,
+      child: Text(
+        '${day.day}',
+        style: textStyle,
+      ),
     );
   }
 
